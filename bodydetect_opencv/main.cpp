@@ -9,6 +9,9 @@ int main() {
     
     VideoCapture vcap(0);
     CascadeClassifier fd("../resources/har_body.xml");
+    
+    namedWindow("Face Detect", WINDOW_AUTOSIZE);
+    
     UMat frame, frameGray;
     Mat canvas;
     std::vector<Rect> faces;

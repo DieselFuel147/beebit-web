@@ -65,6 +65,8 @@ int main(int argc, char **argv) {
     
     uint32_t frame_count = 0;
     
+    cv::namedWindow("cam", cv::WINDOW_AUTOSIZE);
+    
     // HAAR cascade setup
     cv::CascadeClassifier face_classify("../resources/har_face.xml");
     std::vector<cv::Rect> classified;
