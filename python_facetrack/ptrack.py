@@ -1,8 +1,8 @@
 import numpy as np
 import cv2 as cv
 
-face_cascade = cv.CascadeClassifier('har_face.xml')
-eye_cascade = cv.CascadeClassifier('har_eyes.xml')
+face_cascade = cv.CascadeClassifier('../resources/har_face.xml')
+eye_cascade = cv.CascadeClassifier('../resources/har_eyes.xml')
 cam = cv.VideoCapture(0)
 
 while(True):
