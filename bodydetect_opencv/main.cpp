@@ -7,7 +7,7 @@ using namespace cv;
 int main() {
     // initialization
     
-    VideoCapture vcap("../resources/vtest.avi");
+    VideoCapture vcap(0);
     CascadeClassifier fd("../resources/har_body.xml");
     UMat frame, frameGray;
     Mat canvas;
