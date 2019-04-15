@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -g -Wall
 SRCS = main.cpp nms.cpp util.cpp
-PROG = bodydetect
+PROG = bodydetect.out
 
 OPENCV = `pkg-config opencv --cflags --libs`
 LIBS = $(OPENCV)

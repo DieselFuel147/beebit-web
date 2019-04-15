@@ -51,7 +51,7 @@ void detect_faces(cv::CascadeClassifier &classifier, std::vector<cv::Rect> &dete
         classifier.detectMultiScale(detector, detect);
 
         for (const cv::Rect &r : detect) {
-            cv::rectangle(img_read, r, cv::Scalar(0, 0, 255));
+            cv::rectangle(img_read, r, cv::Scalar(0, 0, 255), 4);
         }
         
         PROCESS_FLAG = true;
