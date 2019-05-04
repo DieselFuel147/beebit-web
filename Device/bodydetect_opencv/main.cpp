@@ -20,11 +20,11 @@ int main() {
         vcap >> frame;
         cvtColor(frame, frameGray, COLOR_BGR2GRAY);
         equalizeHist(frameGray, frameGray);
-        fd.detectMultiScale(frameGray, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30));
+        fd.detectMultiScale(frameGray, faces, 1.05, 3, 0|CASCADE_SCALE_IMAGE, Size(30, 30));
       
         frame.copyTo(canvas);
         for( size_t i = 0; i < faces.size(); i++ ) {
-          rectangle(canvas, faces[i], Scalar(255, 0, 0));
+          rectangle(canvas, faces[i], Scalar(255, 255, 0), 5);
         }
         
         imshow("Face Detect", canvas);
