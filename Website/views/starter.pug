@@ -1,0 +1,329 @@
+doctype html
+// saved from url=(0048)https://adminlte.io/themes/AdminLTE/starter.html
+html(style='height: auto; min-height: 100%;')
+	head
+		meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+		meta(http-equiv='X-UA-Compatible', content='IE=edge')
+		title AdminLTE 2 | Starter
+		// Tell the browser to be responsive to screen width
+		meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
+		//link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/bootstrap.min.css')
+		link(rel='stylesheet', href='../node_modules/admin-lte/bower_components/bootstrap/dist/css/bootstrap.min.css')
+		// Font Awesome
+		//link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/font-awesome.min.css')
+		link(rel='stylesheet', href='../node_modules/admin-lte/bower_components/font-awesome/css/font-awesome.min.css')
+		// Ionicons
+		//link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/ionicons.min.css')
+		link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/ionicons.min.css')
+		// Theme style
+		link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/AdminLTE.min.css')
+		//
+			AdminLTE Skins. We have chosen the skin-blue for this starter
+			page. However, you can choose any other skin. Make sure you
+			apply the skin class to the body tag so the changes take effect.
+		//link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/skin-blue.min.css')
+		link(rel='stylesheet', href='../node_modules/admin-lte/dist/css/skins/skin-blue.min.css')
+		// HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+		// WARNING: Respond.js doesn't work if you view the page via file://
+		//
+			if lt IE 9
+			script(src='https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js')
+			script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
+		// Google Font
+		link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/css')
+	//
+		BODY TAG OPTIONS:
+		=================
+		Apply one or more of the following classes to get the
+		desired effect
+		|---------------------------------------------------------|
+		| SKINS         | skin-blue                               |
+		|               | skin-black                              |
+		|               | skin-purple                             |
+		|               | skin-yellow                             |
+		|               | skin-red                                |
+		|               | skin-green                              |
+		|---------------------------------------------------------|
+		|LAYOUT OPTIONS | fixed                                   |
+		|               | layout-boxed                            |
+		|               | layout-top-nav                          |
+		|               | sidebar-collapse                        |
+		|               | sidebar-mini                            |
+		|---------------------------------------------------------|
+	body.skin-blue.sidebar-mini(style='height: auto; min-height: 100%;')
+		.wrapper(style='height: auto; min-height: 100%;')
+			// Main Header
+			header.main-header
+				// Logo
+				a.logo(href='https://adminlte.io/themes/AdminLTE/index2.html')
+					// mini logo for sidebar mini 50x50 pixels
+					span.logo-mini
+						b A
+						| LT
+					// logo for regular state and mobile devices
+					span.logo-lg
+						b Admin
+						| LTE
+				// Header Navbar
+				nav.navbar.navbar-static-top(role='navigation')
+					// Sidebar toggle button
+					a.sidebar-toggle(href='https://adminlte.io/themes/AdminLTE/starter.html#', data-toggle='push-menu', role='button')
+						span.sr-only Toggle navigation
+					// Navbar Right Menu
+					.navbar-custom-menu
+						ul.nav.navbar-nav
+							// Messages: style can be found in dropdown.less
+							li.dropdown.messages-menu
+								// Menu toggle button
+								a.dropdown-toggle(href='https://adminlte.io/themes/AdminLTE/starter.html#', data-toggle='dropdown')
+									i.fa.fa-envelope-o
+									span.label.label-success 4
+								ul.dropdown-menu
+									li.header You have 4 messages
+									li
+										// inner menu: contains the messages
+										ul.menu
+											li
+												// start message
+												a(href='https://adminlte.io/themes/AdminLTE/starter.html#')
+													.pull-left
+														// User Image
+														img.img-circle(src='./AdminLTE 2 _ Starter_files/user2-160x160.jpg', alt='User Image')
+													// Message title and timestamp
+													h4
+														| Support Team
+														small
+															i.fa.fa-clock-o
+															|  5 mins
+													// The message
+													p Why not buy a new awesome theme?
+											// end message
+											// /.menu
+									li.footer
+										a(href='https://adminlte.io/themes/AdminLTE/starter.html#') See All Messages
+							// /.messages-menu
+							// Notifications Menu
+							li.dropdown.notifications-menu
+								// Menu toggle button
+								a.dropdown-toggle(href='https://adminlte.io/themes/AdminLTE/starter.html#', data-toggle='dropdown')
+									i.fa.fa-bell-o
+									span.label.label-warning 10
+								ul.dropdown-menu
+									li.header You have 10 notifications
+									li
+										// Inner Menu: contains the notifications
+										ul.menu
+											li
+												// start notification
+												a(href='https://adminlte.io/themes/AdminLTE/starter.html#')
+													i.fa.fa-users.text-aqua
+													|  5 new members joined today
+											// end notification
+									li.footer
+										a(href='https://adminlte.io/themes/AdminLTE/starter.html#') View all
+							// Tasks Menu
+							li.dropdown.tasks-menu
+								// Menu Toggle Button
+								a.dropdown-toggle(href='https://adminlte.io/themes/AdminLTE/starter.html#', data-toggle='dropdown')
+									i.fa.fa-flag-o
+									span.label.label-danger 9
+								ul.dropdown-menu
+									li.header You have 9 tasks
+									li
+										// Inner menu: contains the tasks
+										ul.menu
+											li
+												// Task item
+												a(href='https://adminlte.io/themes/AdminLTE/starter.html#')
+													// Task title and progress text
+													h3
+														| Design some buttons
+														small.pull-right 20%
+													// The progress bar
+													.progress.xs
+														// Change the css width attribute to simulate progress
+														.progress-bar.progress-bar-aqua(style='width: 20%;', role='progressbar', aria-valuenow='20', aria-valuemin='0', aria-valuemax='100')
+															span.sr-only 20% Complete
+											// end task item
+									li.footer
+										a(href='https://adminlte.io/themes/AdminLTE/starter.html#') View all tasks
+							// User Account Menu
+							li.dropdown.user.user-menu
+								// Menu Toggle Button
+								a.dropdown-toggle(href='https://adminlte.io/themes/AdminLTE/starter.html#', data-toggle='dropdown')
+									// The user image in the navbar
+									img.user-image(src='./AdminLTE 2 _ Starter_files/user2-160x160.jpg', alt='User Image')
+									// hidden-xs hides the username on small devices so only the image appears.
+									span.hidden-xs Alexander Pierce
+								ul.dropdown-menu
+									// The user image in the menu
+									li.user-header
+										img.img-circle(src='./AdminLTE 2 _ Starter_files/user2-160x160.jpg', alt='User Image')
+										p
+											| Alexander Pierce - Web Developer
+											small Member since Nov. 2012
+									// Menu Body
+									li.user-body
+										.row
+											.col-xs-4.text-center
+												a(href='https://adminlte.io/themes/AdminLTE/starter.html#') Followers
+											.col-xs-4.text-center
+												a(href='https://adminlte.io/themes/AdminLTE/starter.html#') Sales
+											.col-xs-4.text-center
+												a(href='https://adminlte.io/themes/AdminLTE/starter.html#') Friends
+										// /.row
+										// Menu Footer
+									li.user-footer
+										.pull-left
+											a.btn.btn-default.btn-flat(href='https://adminlte.io/themes/AdminLTE/starter.html#') Profile
+										.pull-right
+											a.btn.btn-default.btn-flat(href='https://adminlte.io/themes/AdminLTE/starter.html#') Sign out
+							// Control Sidebar Toggle Button
+							li
+								a(href='https://adminlte.io/themes/AdminLTE/starter.html#', data-toggle='control-sidebar')
+									i.fa.fa-gears
+			// Left side column. contains the logo and sidebar
+			aside.main-sidebar
+				// sidebar: style can be found in sidebar.less
+				section.sidebar
+					// Sidebar user panel (optional)
+					.user-panel
+						.pull-left.image
+							img.img-circle(src='./AdminLTE 2 _ Starter_files/user2-160x160.jpg', alt='User Image')
+						.pull-left.info
+							p Alexander Pierce
+							// Status
+							a(href='https://adminlte.io/themes/AdminLTE/starter.html#')
+								i.fa.fa-circle.text-success
+								|  Online
+					// search form (Optional)
+					form.sidebar-form(action='https://adminlte.io/themes/AdminLTE/starter.html#', method='get')
+						.input-group
+							input.form-control(type='text', name='q', placeholder='Search...')
+							span.input-group-btn
+								button#search-btn.btn.btn-flat(type='submit', name='search')
+									i.fa.fa-search
+					// /.search form
+					// Sidebar Menu
+					ul.sidebar-menu.tree(data-widget='tree')
+						li.header HEADER
+						// Optionally, you can add icons to the links
+						li.active
+							a(href='https://adminlte.io/themes/AdminLTE/starter.html#')
+								i.fa.fa-link
+								span Link
+						li
+							a(href='https://adminlte.io/themes/AdminLTE/starter.html#')
+								i.fa.fa-link
+								span Another Link
+						li.treeview
+							a(href='https://adminlte.io/themes/AdminLTE/starter.html#')
+								i.fa.fa-link
+								span Multilevel
+								span.pull-right-container
+									i.fa.fa-angle-left.pull-right
+							ul.treeview-menu
+								li
+									a(href='https://adminlte.io/themes/AdminLTE/starter.html#') Link in level 2
+								li
+									a(href='https://adminlte.io/themes/AdminLTE/starter.html#') Link in level 2
+					// /.sidebar-menu
+					// /.sidebar
+					// Content Wrapper. Contains page content
+					.content-wrapper(style='min-height: 1143px;')
+						// Content Header (Page header)
+						section.content-header
+							h1
+								| Page Header
+								small Optional description
+							ol.breadcrumb
+								li
+									a(href='https://adminlte.io/themes/AdminLTE/starter.html#')
+										i.fa.fa-dashboard
+										|  Level
+								li.active Here
+						// Main content
+						section.content.container-fluid
+							//
+								------------------------
+								| Your Page Content Here |
+								------------------------
+						// /.content
+						// /.content-wrapper
+						// Main Footer
+						footer.main-footer
+							// To the right
+							.pull-right.hidden-xs Anything you want
+							// Default to the left
+							strong
+								| Copyright © 2016 
+								a(href='https://adminlte.io/themes/AdminLTE/starter.html#') Company
+								| .
+							|  All rights reserved.
+						// Control Sidebar
+						aside.control-sidebar.control-sidebar-dark
+							// Create the tabs
+							ul.nav.nav-tabs.nav-justified.control-sidebar-tabs
+								li.active
+									a(href='https://adminlte.io/themes/AdminLTE/starter.html#control-sidebar-home-tab', data-toggle='tab')
+										i.fa.fa-home
+								li
+									a(href='https://adminlte.io/themes/AdminLTE/starter.html#control-sidebar-settings-tab', data-toggle='tab')
+										i.fa.fa-gears
+							// Tab panes
+							.tab-content
+								// Home tab content
+								#control-sidebar-home-tab.tab-pane.active
+									h3.control-sidebar-heading Recent Activity
+									ul.control-sidebar-menu
+										li
+											a(href='javascript:;')
+												i.menu-icon.fa.fa-birthday-cake.bg-red
+												.menu-info
+													h4.control-sidebar-subheading Langdon's Birthday
+													p Will be 23 on April 24th
+									// /.control-sidebar-menu
+									h3.control-sidebar-heading Tasks Progress
+									ul.control-sidebar-menu
+										li
+											a(href='javascript:;')
+												h4.control-sidebar-subheading
+													| Custom Template Design
+													span.pull-right-container
+														span.label.label-danger.pull-right 70%
+												.progress.progress-xxs
+													.progress-bar.progress-bar-danger(style='width: 70%;')
+									// /.control-sidebar-menu
+									// /.tab-pane
+									// Stats tab content
+									#control-sidebar-stats-tab.tab-pane Stats Tab Content
+									// /.tab-pane
+									// Settings tab content
+									#control-sidebar-settings-tab.tab-pane
+										form(method='post')
+											h3.control-sidebar-heading General Settings
+											.form-group
+												label.control-sidebar-subheading
+													| Report panel usage
+													input.pull-right(type='checkbox', checked='')
+												p Some information about this general settings option
+											// /.form-group
+											// /.tab-pane
+											// /.control-sidebar
+											//
+												Add the sidebar's background. This div must be placed
+												immediately after the control sidebar
+											.control-sidebar-bg
+		// ./wrapper
+		// REQUIRED JS SCRIPTS
+		// jQuery 3
+		script(src='./AdminLTE 2 _ Starter_files/jquery.min.js.download')
+		// Bootstrap 3.3.7
+		script(src='./AdminLTE 2 _ Starter_files/bootstrap.min.js.download')
+		//script(src='./node_modules/admin-lte/bower_components/bootstrap/dist/js/bootstrap.min.js.download')
+		// AdminLTE App
+		script(src='./AdminLTE 2 _ Starter_files/adminlte.min.js.download')
+		//
+			Optionally, you can add Slimscroll and FastClick plugins.
+			Both of these plugins are recommended to enhance the
+			user experience.
