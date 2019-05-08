@@ -7,30 +7,25 @@ html(style='height: auto; min-height: 100%;')
 		title AdminLTE 2 | Starter
 		// Tell the browser to be responsive to screen width
 		meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
-		//link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/bootstrap.min.css')
-		link(rel='stylesheet', href='../node_modules/admin-lte/bower_components/bootstrap/dist/css/bootstrap.min.css')
+		link(rel='stylesheet', href='/bootstrap.min.css')
 		// Font Awesome
-		//link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/font-awesome.min.css')
-		link(rel='stylesheet', href='../node_modules/admin-lte/bower_components/font-awesome/css/font-awesome.min.css')
+		link(rel='stylesheet', href='/font-awesome.min.css')
 		// Ionicons
-		//link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/ionicons.min.css')
-		link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/ionicons.min.css')
+		link(rel='stylesheet', href='/ionicons.min.css')
 		// Theme style
-		link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/AdminLTE.min.css')
+		link(rel='stylesheet', href='/AdminLTE.min.css')
 		//
 			AdminLTE Skins. We have chosen the skin-blue for this starter
 			page. However, you can choose any other skin. Make sure you
 			apply the skin class to the body tag so the changes take effect.
-		//link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/skin-blue.min.css')
-		link(rel='stylesheet', href='../node_modules/admin-lte/dist/css/skins/skin-blue.min.css')
+		link(rel='stylesheet', href='./skin-blue.min.css')
 		// HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
 		// WARNING: Respond.js doesn't work if you view the page via file://
-		//
-			if lt IE 9
+		//if lt IE 9
 			script(src='https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js')
 			script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
 		// Google Font
-		link(rel='stylesheet', href='./AdminLTE 2 _ Starter_files/css')
+		link(rel='stylesheet', href='./css')
 	//
 		BODY TAG OPTIONS:
 		=================
@@ -88,7 +83,7 @@ html(style='height: auto; min-height: 100%;')
 												a(href='https://adminlte.io/themes/AdminLTE/starter.html#')
 													.pull-left
 														// User Image
-														img.img-circle(src='./AdminLTE 2 _ Starter_files/user2-160x160.jpg', alt='User Image')
+														img.img-circle(src='./user2-160x160.jpg', alt='User Image')
 													// Message title and timestamp
 													h4
 														| Support Team
@@ -142,7 +137,7 @@ html(style='height: auto; min-height: 100%;')
 													// The progress bar
 													.progress.xs
 														// Change the css width attribute to simulate progress
-														.progress-bar.progress-bar-aqua(style='width: 20%;', role='progressbar', aria-valuenow='20', aria-valuemin='0', aria-valuemax='100')
+														.progress-bar.progress-bar-aqua(style='width: 20%', role='progressbar', aria-valuenow='20', aria-valuemin='0', aria-valuemax='100')
 															span.sr-only 20% Complete
 											// end task item
 									li.footer
@@ -152,13 +147,13 @@ html(style='height: auto; min-height: 100%;')
 								// Menu Toggle Button
 								a.dropdown-toggle(href='https://adminlte.io/themes/AdminLTE/starter.html#', data-toggle='dropdown')
 									// The user image in the navbar
-									img.user-image(src='./AdminLTE 2 _ Starter_files/user2-160x160.jpg', alt='User Image')
+									img.user-image(src='./user2-160x160.jpg', alt='User Image')
 									// hidden-xs hides the username on small devices so only the image appears.
 									span.hidden-xs Alexander Pierce
 								ul.dropdown-menu
 									// The user image in the menu
 									li.user-header
-										img.img-circle(src='./AdminLTE 2 _ Starter_files/user2-160x160.jpg', alt='User Image')
+										img.img-circle(src='./user2-160x160.jpg', alt='User Image')
 										p
 											| Alexander Pierce - Web Developer
 											small Member since Nov. 2012
@@ -173,11 +168,11 @@ html(style='height: auto; min-height: 100%;')
 												a(href='https://adminlte.io/themes/AdminLTE/starter.html#') Friends
 										// /.row
 										// Menu Footer
-									li.user-footer
-										.pull-left
-											a.btn.btn-default.btn-flat(href='https://adminlte.io/themes/AdminLTE/starter.html#') Profile
-										.pull-right
-											a.btn.btn-default.btn-flat(href='https://adminlte.io/themes/AdminLTE/starter.html#') Sign out
+										li.user-footer
+											.pull-left
+												a.btn.btn-default.btn-flat(href='https://adminlte.io/themes/AdminLTE/starter.html#') Profile
+											.pull-right
+												a.btn.btn-default.btn-flat(href='https://adminlte.io/themes/AdminLTE/starter.html#') Sign out
 							// Control Sidebar Toggle Button
 							li
 								a(href='https://adminlte.io/themes/AdminLTE/starter.html#', data-toggle='control-sidebar')
@@ -189,7 +184,7 @@ html(style='height: auto; min-height: 100%;')
 					// Sidebar user panel (optional)
 					.user-panel
 						.pull-left.image
-							img.img-circle(src='./AdminLTE 2 _ Starter_files/user2-160x160.jpg', alt='User Image')
+							img.img-circle(src='./user2-160x160.jpg', alt='User Image')
 						.pull-left.info
 							p Alexander Pierce
 							// Status
@@ -253,7 +248,8 @@ html(style='height: auto; min-height: 100%;')
 						// Main Footer
 						footer.main-footer
 							// To the right
-							.pull-right.hidden-xs Anything you want
+							.pull-right.hidden-xs
+								| Anything you want
 							// Default to the left
 							strong
 								| Copyright © 2016 
@@ -292,7 +288,7 @@ html(style='height: auto; min-height: 100%;')
 													span.pull-right-container
 														span.label.label-danger.pull-right 70%
 												.progress.progress-xxs
-													.progress-bar.progress-bar-danger(style='width: 70%;')
+													.progress-bar.progress-bar-danger(style='width: 70%')
 									// /.control-sidebar-menu
 									// /.tab-pane
 									// Stats tab content
@@ -306,7 +302,8 @@ html(style='height: auto; min-height: 100%;')
 												label.control-sidebar-subheading
 													| Report panel usage
 													input.pull-right(type='checkbox', checked='')
-												p Some information about this general settings option
+												p
+													| Some information about this general settings option
 											// /.form-group
 											// /.tab-pane
 											// /.control-sidebar
@@ -317,12 +314,11 @@ html(style='height: auto; min-height: 100%;')
 		// ./wrapper
 		// REQUIRED JS SCRIPTS
 		// jQuery 3
-		script(src='./AdminLTE 2 _ Starter_files/jquery.min.js.download')
+		script(src='./jquery.min.js.download')
 		// Bootstrap 3.3.7
-		script(src='./AdminLTE 2 _ Starter_files/bootstrap.min.js.download')
-		//script(src='./node_modules/admin-lte/bower_components/bootstrap/dist/js/bootstrap.min.js.download')
+		script(src='./bootstrap.min.js.download')
 		// AdminLTE App
-		script(src='./AdminLTE 2 _ Starter_files/adminlte.min.js.download')
+		script(src='./adminlte.min.js.download')
 		//
 			Optionally, you can add Slimscroll and FastClick plugins.
 			Both of these plugins are recommended to enhance the
