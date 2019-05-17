@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 			cv::rectangle(canvas, r, cv::Scalar(0, 255, 0), 4);
 		}
         
-        cv::resize(canvas, canvas, cv::Size(1280, 720));
+        	// cv::resize(canvas, canvas, cv::Size(320, 240));
 		// Draw the resultant bounding boxes on the screen
 		cv::imshow("HOG", canvas);
 		
