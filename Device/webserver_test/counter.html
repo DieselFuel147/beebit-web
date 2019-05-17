@@ -1,0 +1,105 @@
+<html>
+
+<head>
+	<title>BeeBit People Counter Prototype</title>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+</head>
+
+<body>
+<h1>Current People Count: <span id='currCount'></span></h1>
+<div style="width: 50%">
+	<canvas id="myChart" width="400" height="400"></canvas>
+</div>
+
+
+<script>
+
+window.chartColors = {
+	red: 'rgb(255, 99, 132)',
+	orange: 'rgb(255, 159, 64)',
+	yellow: 'rgb(255, 205, 86)',
+	green: 'rgb(75, 192, 192)',
+	blue: 'rgb(54, 162, 235)',
+	purple: 'rgb(153, 102, 255)',
+	grey: 'rgb(201, 203, 207)'
+};
+
+var config = {
+	type: 'line',
+	data: {
+		datasets: [{
+			label: "Count",
+			backgroundColor: window.chartColors.red,
+			borderColor: window.chartColors.red,
+			fill: false,
+		}]
+	},
+	options: {
+		responsive: true,
+		title: {
+			display: true,
+			text: 'People Count over Time'
+		},
+		tooltips: {
+			mode: 'index',
+			intersect: false,
+		},
+		hover: {
+			mode: 'nearest',
+			intersect: true
+		},
+		scales: {
+			xAxes: [{
+				display: true,
+				scaleLabel: {
+					display: true,
+					labelString: 'Time'
+				}
+			}],
+			yAxes: [{
+				display: true,
+				scaleLabel: {
+					display: true,
+					labelString: 'Count'
+				}
+			}]
+		}
+	}
+};
+
+function updateCount() {
+	console.log("Hello");
+	const Http = new XMLHttpRequest({mozSystem: true});
+	const url='http://192.168.7.2:3182/';
+	Http.open("GET", url);
+	Http.send();
+	Http.onreadystatechange=(e)=>{
+		document.getElementById("currCount").innerHTML = Http.responseText;
+		
+		var count = parseInt(Http.responseText, 10);
+		
+		if (!isNaN(count)) {
+			// Push the count onto the graph
+			var time = new Date().toLocaleString();
+			config.data.labels.push(time);
+
+			config.data.datasets.forEach(function(dataset) {
+				dataset.data.push(parseInt(Http.responseText, 10));
+			});
+
+			window.myLine.update();
+		}
+	}
+}
+
+window.onload = function() {
+	setInterval(updateCount, 5*1000);
+	var ctx = document.getElementById('myChart').getContext('2d');
+	window.myLine = new Chart(ctx, config);
+};
+
+</script>
+
+</body>
+
+</html>
