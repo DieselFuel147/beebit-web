@@ -90,14 +90,18 @@ int main(int argc, char **argv) {
 	cv::Mat img_local;
 	while(1) {
 		timeStart = std::chrono::high_resolution_clock::now();
-		
+		std::cout << __LINE__ << std::endl;
 		camera.grab();		
 		camera.retrieve(img_local);		
+		std::cout << __LINE__ << std::endl;
 
 		// Draw bounding boxes on the image
 		for (const cv::Rect &r : latest_result.foundLocations) {
 			cv::rectangle(img_local, r, cv::Scalar(0, 255, 0), 4);
 		}
+
+		// Output the detections to standard out so that the script can read then when neccessary
+		std::cout << latest_result.foundLocations.size() << std::endl;
         
 		// Draw the resultant bounding boxes on the screen
 		cv::imshow("HOG", img_local);
@@ -108,8 +112,7 @@ int main(int argc, char **argv) {
 		
 		timeEnd = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> delta = timeEnd-timeStart;
-		std::cout << "Frame Time: " << delta.count() << std::endl;
-		
+
 		char key = (char) cv::waitKey(1);
 		if (key == 'q') break;
 	}

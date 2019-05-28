@@ -29,11 +29,11 @@ ProcessResult latest_result;
 void process_image() {
 	// Processes the images on a separate thread as quickly as possible
 	// This means we can still get a camera feed in real time
-    
+    	std::cout << "Process Img" << std::endl;
 	// Initialize the default HOG descriptor for humans
 	cv::HOGDescriptor hog;
 	hog.setSVMDetector(hog.getDefaultPeopleDetector());
-	
+	std::cout << "Load people detector" << std::endl;
 	cv::Mat current_image;
 	ProcessResult current_result;
 	while (READ_FLAG) {
@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
 	
 	// Open a video capture stream using the given camera
 	raspicam::RaspiCam_Cv camera;
-	
+	std::cout << "Opened cv cam" << std::endl;
 	camera.set(cv::CAP_PROP_FRAME_WIDTH, atoi(argv[1]));
 	camera.set(cv::CAP_PROP_FRAME_HEIGHT, atoi(argv[2]));
 	
@@ -82,17 +82,22 @@ int main(int argc, char **argv) {
 
 	cv::namedWindow("HOG", 1);
 	
+	std::cout << "Create named window" << std::endl;
+
 	// Timing information
 	auto timeStart = std::chrono::high_resolution_clock::now();
 	auto timeEnd = std::chrono::high_resolution_clock::now();
 	
 	std::thread detect_thread(process_image);
+	std::cout << "Process thread started" << std::endl;
 	cv::Mat img_local;
 	while(1) {
 		timeStart = std::chrono::high_resolution_clock::now();
 		
 		camera.grab();		
 		camera.retrieve(img_local);		
+		
+		std::cout << "image fetched" << std::endl;
 
 		// Draw bounding boxes on the image
 		for (const cv::Rect &r : latest_result.foundLocations) {
