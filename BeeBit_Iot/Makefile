@@ -3,7 +3,7 @@ CFLAGS = -g -Wall
 SRCS = main.o nms.o util.o
 PROG = bodydetect.out
 
-OPENCV = `pkg-config opencv --cflags --libs`
+OPENCV = `pkg-config opencv4 --cflags --libs`
 RASPI = -I/usr/local/include/ -lraspicam -lraspicam_cv 
 MMAL = -L/opt/vc/lib -lmmal -lmmal_core -lmmal_util
 
