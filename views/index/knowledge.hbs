@@ -1,0 +1,37 @@
+<div class="container mt-5">
+  <h1>How BeeBit Hive Works</h1>
+
+  <div class="row">
+
+    <div class="col-sm-4">
+        <div class="card" style="height: 44rem;">
+          <img src="images/fetchImg.svg" class="card-img-top" alt="capture to graph">
+          <div class="card-body">
+            <h5 class="card-title"><strong>1. </strong>Fetch the Image</h5>
+            <p class="card-text">The <b>BeeBit Hive</b> is built upon industry standard technologies and modern IoT mainstays, streamlining our development. The Bee is built on a Raspberry Pi <small>(but it will probably run on any ARM chip - we even tried a BeagleBone Black)</small>, with a Pi Camera or other input methods supported. Images are sent from the camera to an algorithm running on the device that tells the <em>detector</em> roughly where to <em>look</em>. This helps us run things very fast!</p>
+          </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="card" style="height: 44rem;">
+          <img src="images/detectImg.svg" class="card-img-top" alt="capture to graph">
+          <div class="card-body">
+            <h5 class="card-title"><strong>2. </strong>Detection Phase</h5>
+            <p class="card-text">The current person-detection algorithm that the Bees utilise is based on comparing HOGs (Histogram of Gradients), which is a description of what a person looks like as a set of pixel gradients in an area, compared to the collected image in different scales <small>(it's called multiscale detection!).</small> It's very fast, but in the future we aim to get the same speed with a much more accurate detector - a <em>trained neural net.</em> We'll use some <em>clever 3D tricks</em> to hopefully pull this off.</p>
+          </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="card" style="height: 44rem;">
+          <img src="images/captureToGraph.svg" class="card-img-top" alt="capture to graph">
+          <div class="card-body">
+            <h5 class="card-title"><strong>3. </strong>Data Logging</h5>
+            <p class="card-text">Once an image has been processed and a person-detection count produced, the Bee firmware sends the data back to a Nube iO Edge28 controller wirelessly, utilising either LoRa <b>(Long distance and low power)</b> or Ethernet (WAN) technology. The data from all the Bees is collected and processed by the <b>Hive</b> software running on the controller, and then can provide this data through an <b>API</b>, to the Nube iO automation software, the BeeBit frontend, or any other system where the data could be used.</p>
+          </div>
+        </div>
+    </div>
+  
+  </div>
+</div>

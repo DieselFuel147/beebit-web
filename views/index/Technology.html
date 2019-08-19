@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>BeeBit</title>
+	</head>
+	<body>
+		<!-- navigation header. Needs to be moved to a side menu at some point -->
+		<div id="navmenu">
+			Logo Goes Here<!-- <img src="beebitlogo.jpg.png.gif.exe" alt="BeeBit Logo"> -->
+			<a href="Main.html">Overview</a>
+			<a href="HVACAutomation.html">HVAC Automation</a>
+			<a href="PeopleCounting.html">People Counting</a>
+			How It Works
+			<a href="Project.html">Project</a>
+			<a href="About.html">About BeeBit</a>
+			<a href="Contact.html">Contact Us</a>
+		</div>
+		
+		<div id="content">
+			<h2>How BeeBit Hive Works</h2>
+		
+			<p>The BeeBit Hive is built upon numerous industry standard technologies, allowing for simplified development, operation, and integration. The Bee is built on a Raspberry Pi, with a Pi Camera attached. Through the BeeBit developed firmware, images are sent from the camera to a person-detection algorithm running on the device.</p>
+			
+			<p>The current person-detection algorithm that the Bees utilise is based on comparing HOGs (Histogram of Gradients), a description of what a person looks like as a set of pixel gradients in an area, to the image from the camera. However, in future we hope to implementa Machine Learning algorithm to improve the accuracy of these models, and allow more flexibility in what the Bees may be able to detect.</p>
+			
+			<p>Once an image has been processed and a person-detection count produced, the Bee firmware sends the data back to a Nube iO Edge28 controller wirelessly, utilising LoRa technology to allow communications to occur with extremely low power usage over enormous ranges. The data from all the Bees is collected and processed by the Hive software running on the controller, and then can provide this data through an API, to the Nube iO automation software, the BeeBit frontend, or any other system where the data could be used.</p>
+		
+		</div>
+		<footer>
+			<p>&copy; 2019 BeeBit</p>				
+		</footer>
+	</body>
+</html>

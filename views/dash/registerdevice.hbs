@@ -1,0 +1,39 @@
+<body class="hold-transition login-page">
+  <link rel="stylesheet" href="/plugins/iCheck/square/blue.css">
+  <div class="login-box">
+    <div class="login-logo">
+      <a href="./starter.html"><b>BeeBit</b> Hive</a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+      <p class="login-box-msg">Link a bee to your account <br>Enter the unique key found on the label for your device</p>
+
+      <form action="/dashboard/register-a-bee" method="POST">
+        <div class="form-group has-feedback">
+          <input type="username" name="uuid" class="form-control" placeholder="UUID">
+          <span class="fa fa-user form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <input type="username" name="description" class="form-control" placeholder="description">
+          <span class="fa fa-user form-control-feedback"></span>
+        </div>
+        <div class="row">
+          <div class="col-xs-4">
+            <button type="submit" class="btn btn-block btn-warning">Link</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/plugins/iCheck/icheck.min.js"></script>
+  <script>
+    $(function () {
+      $('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '20%' /* optional */
+      });
+    });
+  </script>
+</body>

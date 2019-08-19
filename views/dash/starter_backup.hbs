@@ -1,0 +1,298 @@
+<body class="hold-transition skin-yellow sidebar-mini">
+<div class="wrapper">
+  <!-- Main Header -->
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a href="starter.html" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>B</b>BT</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>BeeBit</b></span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+          <span class="sr-only">Toggle navigation</span>
+        </a>
+
+
+      <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="hidden-xs">{{userinfo.fname}} {{userinfo.lname}}</span>
+            </a>
+            
+            <ul class="dropdown-menu menu">
+                <li><a href="/dashboard/logout">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar user panel (optional) -->
+        <div class="image" id='sideImg' style="text-align:center;">
+          <img src="/BeeBitLogoTextless.png" width="150" alt="Logo Image">
+        </div>
+
+      <!-- search form (Optional) -->
+
+      <!-- /.search form -->
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">Navigation</li>
+        <!-- Optionally, you can add icons to the links -->
+        <li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>Hive Dashboard</span></a></li>
+        <li><a href="/dashboard/stats"><i class="fa fa-link"></i> <span>Statistics</span></a></li>
+        <li class="treeview">
+          <a href="#"><i class="fa fa-link"></i> <span>Your Bees</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/dashboard/bees/1">Bee #1</a></li>
+            <li><a href="/dashboard/bees/2">Bee #2</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Hive Dashboard
+        <small>An in depth overview of your hive</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+  <div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Devices Online</span>
+              <span class="info-box-number">5/5</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Detected Today</span>
+                  <span class="info-box-number">1,569</span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="ion ion-stats-bars"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Increase</span>
+                  <span class="info-box-number">+ 50%</span>
+                  <span class="info-box-text">from yesterday</span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-blue"><i class="ion ion-pinpoint"></i></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Most Popular</span>
+                  <span class="info-box-number">Front Entrance</span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+        </div>
+
+
+  </div>
+	<div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Hive Status</h3>
+
+              <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search" aria-label="search">
+
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default" aria-label="search"><i class="fa fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th>ID</th>
+                  <th>Location</th>
+                  <th>People Detecting</th>
+                  <th>Status</th>
+                  <th>Information</th>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>Rear exit</td>
+                  <td>5</td>
+                  <td><span class="label label-success">Online</span></td>
+                  <td>The device is operating as expected.</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Front exit</td>
+                  <td>20</td>
+                  <td><span class="label label-warning">Low battery</span></td>
+                  <td>Device battery is running low.</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Main hallway</td>
+                  <td>0</td>
+                  <td><span class="label label-primary">Starting up</span></td>
+                  <td>The device is starting up.</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Side hall 1</td>
+                  <td>0</td>
+                  <td><span class="label label-danger">Offline</span></td>
+                  <td>Unable to connect to device.</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+  </div>
+  <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Traffic Rankings</h3>
+
+            <div class="box-tools pull-right">
+              <div class="form-group">
+                <select id="pieSelect" class="form-control" aria-label="Traffic time selection">
+                  <option data-date="Today" id="tabletoday">Today</option>
+                  <option data-date="Week" id="tableweek">This week</option>
+                  <option>This month</option>
+                  <option>This year</option>
+                  <option>option 5</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <tbody><tr>
+                <th>Ranking</th>
+                <th>Location</th>
+                <th>Total People</th>
+                <th>Percentage of Traffic</th>
+                <th>Operating Device</th>
+              </tr>
+              <tr>
+                <td>#1</td>
+                <td>Main Entrance</td>
+                <td>145</td>
+                <td>45%</td>
+                <td>
+                  <a href="bee1.html">
+                    <div style="height:100%";"width:100%">
+                      Bee 1
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                <td>#2</td>
+                <td>Main Hall</td>
+                <td>100</td>
+                <td>35%</td>
+                <td>
+                  <a href="bee2.html">
+                    <div style="height:100%";"width:100%">
+                      Bee 2
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                  <td>#3</td>
+                  <td>Rear Entrance</td>
+                  <td>55</td>
+                  <td>20%</td>
+                  <td>
+                    <a href="bee2.html">
+                      <div style="height:100%";"width:100%">
+                        Bee 3
+                      </div>
+                  </td>
+                </tr>
+            </tbody></table>
+          </div>
+          <!-- /.box-body -->
+        </div>
+      </div>
+    </div>
+      <!--------------------------
+        | Your Page Content Here |
+        -------------------------->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2019 <a href="index.html" style="color:#000000">BeeBit</a>.</strong> All rights reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+  immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+</body>
