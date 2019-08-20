@@ -304,7 +304,7 @@
 
 
         var peopleDetecting = false;
-        if ({{this.people}} > 0 && piUpdate > timeNow){ /* This means we recieved data in the last 30 minutes. */
+        if ({{this.people}} > 0 && piUpdate > timeNow){ /* This means we recieved data in the last minute. */
          var labelSuccess = document.getElementById("label{{@key}}");
          labelSuccess.className = "label label-success";
          labelSuccess.innerHTML = "Detecting";
@@ -313,7 +313,7 @@
           status.innerHTML = "Detecting"
         }
         else{
-          var fail = document.getElementById("label{{@key}}");
+          var fail = document.getElementById("label{{@key}}");  // Change to IDLE
           fail.className = "label label-warning";
           fail.innerHTML = "Idle";
 
@@ -326,17 +326,17 @@
 
         if (piUpdate > timeNow)
         {
-          peopleDetecting = true;
+          peopleDetecting = true; // We are detecting people again!
         }
        
         if (peopleDetecting)
         {
-          $("#device{{@key}}").load("/dashboard #device{{@key}}");
+          $("#device{{@key}}").load("/dashboard #device{{@key}}");  // Update peoplecount only when we detect people
         }
         $("#update{{@key}}").load("/dashboard #update{{@key}}");
       {{/each}}
     {{/if}}
-    setTimeout(updateCount, 2000);
+    setTimeout(updateCount, 2000); // Refresh the data every two seconds.
   }
 updateCount();
 </script>
