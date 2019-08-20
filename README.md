@@ -19,3 +19,21 @@ To get the latest version installed in debian, do the following;
 curl -sL https://deb.nodesource.com/setup_12.x | bash -
 apt-get install -y nodejs
 ```
+
+One in the root directory, run:
+
+```sh
+npm install
+```
+
+To install all dependancies. Next run:
+
+```sh
+node app.js
+```
+
+To run as normal.
+
+## Test Data
+
+Currently to simulate data from the raspberry py you can run test.py in the test folder.

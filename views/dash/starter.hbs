@@ -162,8 +162,8 @@
               </div>
             </div>
             <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
+            <div class="box-body table-responsive no-padding" id="deviceBox">
+              <table class="table table-hover" id="statusTable">
                 <tr>
                   <th>ID</th>
                   <th>Location</th>
@@ -174,13 +174,13 @@
                 </tr>
                 {{#if devices}}
                   {{#each devices}}
-                  <tr>
-                    <td>{{@key}}</td>
+                  <tr id="mainTable{{@key}}">
+                    <td>{{@key}}</td> 
                     <td>{{this.description}}</td>
-                    <td>{{this.people}}</td>
-                    <td>{{this.last_update}}</td>
-                    <td><span class="label label-warning">{{status}}</span></td>
-                    <td>{{status}}</td>
+                    <td id="device{{@key}}">{{this.people}}</td>
+                    <td id="update{{@key}}">{{this.last_update}}</td>
+                    <td><span class="label label-success" id="label{{@key}}"></span></td>
+                    <td id="status{{@key}}">{{status}}</td>
                   </tr>
                   {{/each}}
                 {{/if}}
@@ -237,7 +237,7 @@
           <!-- /.box-header -->
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
-              <tbody><tr>
+              <tbody id="deviceInfo"><tr>
                 <th>Ranking</th>
                 <th>Location</th>
                 <th>Total People</th>
@@ -290,4 +290,54 @@
   immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
 </div>
+<script>
+  function updateCount()
+  {
+
+    {{#if devices}}
+      {{#each devices}}
+        var timeNow = new Date();
+        var lastUpdate = document.getElementById("update{{@key}}");
+        var piUpdate = new Date(lastUpdate.textContent);
+        piUpdate.setMinutes(piUpdate.getMinutes() + 1); /* Could set this to be more aggressive. grr */
+        timeNow.getTime();
+
+
+        var peopleDetecting = false;
+        if ({{this.people}} > 0 && piUpdate > timeNow){ /* This means we recieved data in the last 30 minutes. */
+         var labelSuccess = document.getElementById("label{{@key}}");
+         labelSuccess.className = "label label-success";
+         labelSuccess.innerHTML = "Detecting";
+
+         var status = document.getElementById("status{{@key}}");
+          status.innerHTML = "Detecting"
+        }
+        else{
+          var fail = document.getElementById("label{{@key}}");
+          fail.className = "label label-warning";
+          fail.innerHTML = "Idle";
+
+          var status = document.getElementById("status{{@key}}");
+          status.innerHTML = "Idling"
+          
+          var people = document.getElementById("device{{@key}}");
+          people.innerHTML = "0";
+        }
+
+        if (piUpdate > timeNow)
+        {
+          peopleDetecting = true;
+        }
+       
+        if (peopleDetecting)
+        {
+          $("#device{{@key}}").load("/dashboard #device{{@key}}");
+        }
+        $("#update{{@key}}").load("/dashboard #update{{@key}}");
+      {{/each}}
+    {{/if}}
+    setTimeout(updateCount, 2000);
+  }
+updateCount();
+</script>
 </body>

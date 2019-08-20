@@ -165,6 +165,18 @@ desired effect
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <tbody>
+                {{#if devices}}
+                  {{#each devices}}
+                  <tr>
+                    <td class="mailbox-name"><span class="label label-danger">Danger</span></td>
+                    <td class="mailbox-subject">{{this.description}}</td>
+                    <td>{{this.people}}</td>
+                    <td class="mailbox-date">{{this.last_update}}</td>
+                    <td>{{status}}</td>
+                  </tr>
+                  {{/each}}
+                {{/if}}
+                    {{!--
                     <tr>
                       <td class="mailbox-name"><span class="label label-danger">Danger</span></td>
                       <td class="mailbox-subject"><b>Bear Sighting!</b> - Is he after the honey? Assembling drones...
@@ -186,7 +198,7 @@ desired effect
                     <td class="mailbox-attachment"></td>
                     <td class="mailbox-date">5 mins ago</td>
                   </tr>
-
+                  !--}}
                   </tbody>
                 </table>
                 <!-- /.table -->
