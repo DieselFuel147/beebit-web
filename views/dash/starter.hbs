@@ -296,6 +296,7 @@
 
     {{#if devices}}
       {{#each devices}}
+      
         var timeNow = new Date();
         var lastUpdate = document.getElementById("update{{@key}}");
         var piUpdate = new Date(lastUpdate.textContent);

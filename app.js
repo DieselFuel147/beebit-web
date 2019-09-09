@@ -8,6 +8,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require ('express-session');
+const bcrypt = require('bcrypt');
 
 /* local resources */
 const Dbhelper = require ('./db/DBhelper.js');

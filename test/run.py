@@ -40,7 +40,7 @@ def update(status):
 # todo: not crash when no connection
 while True:
     buffer = BytesIO()
-    http_code = update("Detection Update")
+    http_code = update("People Detected")
     response = buffer.getvalue()
     print(response)
 

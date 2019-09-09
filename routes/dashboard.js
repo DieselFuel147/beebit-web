@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 let database
 module.exports = function(db) {
@@ -35,15 +36,19 @@ router.post('/register', function(req, res, next) {
   if (password != confirm_password) {
     res.end("Passwords do not match"); return;
   }
+  const saltRounds = 10;
+
 
   database.getUserByUsername(username, function (err, rows) {
     if (rows.length == 0) {
-      database.addUser(username, firstname, lastname, 'USER', password, (err) => {
-        if (err) {
-          res.status(500).end("Error creating account");
-        } else {
-          res.end("Account Created");
-        }
+      bcrypt.hash(password, saltRounds, function(err, hash) {
+        database.addUser(username, firstname, lastname, 'USER', hash, (err) => {
+          if (err) {
+            res.status(500).end("Error creating account");
+          } else {
+            res.end("Account Created");
+          }
+        });
       });
     } else {
       res.end("Account by that username exists");
@@ -51,42 +56,48 @@ router.post('/register', function(req, res, next) {
   });
 });
 
-/* POST login. */
-router.post('/login', function(req, res, next) {
-  if (req.session.username) {
-    res.end('You are already logged in as: ' + req.session.username + ' cookie expires in: ' + (req.session.cookie.maxAge / 1000));
-    return;
-  }
-
-  let username = req.body["username"];
-  let password = req.body["password"];
-
-  /* Find user */
-  database.getUserByUsername(username, function (err, rows) {
-    console.log("attempting search for: " + username + " " + password + " in db");
-    if (err) {
-      console.log ("db error");
-      console.error(err);
-    } else {
-      rows.forEach(function(row) {
-        console.log ("found");
-        if (row.passwd === password) {
-          console.log("Successful login: " + username);
-          req.session.username = row.username;
-          req.session.fname = row.fname;
-          req.session.lname = row.lname;
-          req.session.usertype = row.authority;
-
-          res.redirect("/dashboard");
-          res.end();
-        } else {
-            res.end("Invalid password for user: " + username);
-        }
-      });
+  /* POST login. */
+  router.post('/login', function(req, res, next) {
+    if (req.session.username) {
+      res.end('You are already logged in as: ' + req.session.username + ' cookie expires in: ' + (req.session.cookie.maxAge / 1000));
+      return;
     }
-    res.status(403).end("Invalid login");
+  
+    let username = req.body["username"];
+    let password = req.body["password"];
+    /* Find user */
+    database.getUserByUsername(username, function (err, rows) {
+      console.log("attempting search for: " + username + " " + password + " in db");
+      if (err) {
+        console.log ("db error");
+        console.error(err);
+      } 
+      else{
+          
+          rows.forEach(function(row) {
+            console.log ("found");
+            bcrypt.compare(password, row.passwd, function(err2, result) {
+              if (result === true)
+              {
+                console.log("Successful login: " + username);
+                req.session.username = row.username;
+                req.session.fname = row.fname;
+                req.session.lname = row.lname;
+                req.session.usertype = row.authority;
+                res.redirect("/dashboard");
+                res.end();
+              }
+              else {
+                res.end("Invalid password for user: " + username);
+              }
+              }); 
+         });
+      }
+      setTimeout(function(){ res.status(403).end("Invalid login"); }, 500);
+         
+    });
+    
   });
-});
 
 /* GET logout. */
 router.get('/logout', function(req, res, next) {

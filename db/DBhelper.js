@@ -68,8 +68,8 @@ Dbhelper.prototype.updateDeviceStatus = function(uuid, data, callback) {
     people_detected = 0;
     if (data.status) status = data.status;
     if (data.people) people_detected = data.people;
-    const sql = "UPDATE DEVICES SET last_update = strftime('%s', 'now'), people = ?, status = ? WHERE uuid = X'" + uuid + "';";
-    db.serialize(() => { db.get(sql, people_detected, status, callback) });
+    const sql = "INSERT INTO LOGS(time,people,status,uuid) VALUES (strftime('%s', 'now'),'"+people_detected+"','"+status+"',X'" + uuid + "');";
+    db.serialize(() => { db.run(sql, callback) });
 };
 
 Dbhelper.prototype.addDevice = function(uuid, user, description = "", callback) {
