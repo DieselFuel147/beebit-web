@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 IP=beebithive.com
 PORT=22
