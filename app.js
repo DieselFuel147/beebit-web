@@ -33,6 +33,8 @@ const dashboard = require('./routes/dashboard')(db);
 const demo = require('./routes/demo');
 const bee = require('./routes/bee')(db);
 
+process.title = "beebit-web";
+
 /* View engine setup */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');

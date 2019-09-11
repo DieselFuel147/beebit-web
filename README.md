@@ -1,12 +1,10 @@
 # BeeBit Operations
 
-This repository contains the working tree of **BeeBit**, including the **BeeBit Hive** and all related materials.
+This repository contains the working tree of **The BeeBit Website**, including the **BeeBit Hive** and API endpoints for the IoT component.
 
-## General Compilation Instructions
+Please see [https://github.com/winzlebee/beebit-iot](the IoT repository) for the C++ component running on the devices.
 
-For specific instructions, please visit the subdirectories 'Device' and 'Website' and consult relevant readme files.
-
-All C-derived programs are provided with a makefile, so entering the directory and typing *make* should be sufficient.
+## General Running Instructions
 
 ## Website
 
@@ -29,10 +27,15 @@ npm install
 To install all dependancies. Next run:
 
 ```sh
-node app.js
+npm start
 ```
 
 To run as normal.
+
+## Commit Script
+
+Anything that is pushed to the *master* branch of this repository is automagically deployed to https://app.beebithive.com
+Therefore make sure your changes run! Only basic checks are made, attempting to run `npm start` only.
 
 ## Test Data
 
