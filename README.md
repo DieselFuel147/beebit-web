@@ -2,7 +2,7 @@
 
 This repository contains the working tree of **The BeeBit Website**, including the **BeeBit Hive** and API endpoints for the IoT component.
 
-Please see [https://github.com/winzlebee/beebit-iot](the IoT repository) for the C++ component running on the devices.
+Please see [the IoT repository](https://github.com/winzlebee/beebit-iot) for the C++ component running on the devices.
 
 ## General Running Instructions
 
