@@ -8,6 +8,13 @@ eval "$(ssh-agent -s)" # Start ssh-agent cache
 chmod 600 .travis/pkey # Allow read access to the private key
 ssh-add .travis/pkey # Add the private key to SSH
 
+# Revert untracked server files
+ssh apps@$IP -p $PORT <<EOF
+  cd $DEPLOY_DIR
+  git checkout -- .
+EOF
+
+# Perform the installation of the npm project on the server
 git checkout -- .
 git config --global push.default matching
 git remote add deploy ssh://git@$IP:$PORT$DEPLOY_DIR
