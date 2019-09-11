@@ -17,5 +17,5 @@ ssh apps@$IP -p $PORT <<EOF
   cd $DEPLOY_DIR
   npm install --production
   npm stop
-  npm start
+  npm start &
 EOF
