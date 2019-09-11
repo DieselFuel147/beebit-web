@@ -4,11 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node app.js"
-    , "stop": "pkill --signal SIGINT beebit-web"
   },
-  "devDependencies": {
-    
-  },
+  "devDependencies": {},
   "dependencies": {
     "admin-lte": "^2.4.12",
     "body-parser": "~1.18.2",

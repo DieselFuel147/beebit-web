@@ -10,12 +10,12 @@ ssh-add .travis/pkey # Add the private key to SSH
 
 git config --global push.default matching
 git remote add deploy ssh://git@$IP:$PORT$DEPLOY_DIR
-git push deploy master
+git push --force deploy master
 
 # Perform the installation of the npm project on the server
 ssh apps@$IP -p $PORT <<EOF
   cd $DEPLOY_DIR
   npm install --production
-  npm stop
-  npm start &
+  pm2 stop all
+  pm2 start
 EOF
