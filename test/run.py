@@ -18,8 +18,10 @@ update_interval = 0.1
 uuid = 'ED5692A7965AA31CC775D7EF417C5F72'
 
 # The idea is there will be more entry points for things like bee/camerafeed ..etc
-base = 'http://127.0.0.1:3420/'
-update_url = base + 'bee/update'
+base = 'http://app.beebithive.com/bee'
+
+update_url = base + '/update'
+photo_url = base + '/photo'
 
 
 def update(status):

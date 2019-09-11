@@ -6,17 +6,26 @@
     "start": "node app.js"
   },
   "devDependencies": {
-    "debug": "~2.6.9"
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
+    "debug": "~2.6.9",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8",
+    "admin-lte": "^2.4.12"
   },
   "dependencies": {
-    "admin-lte": "^2.4.12",
     "bcrypt": "^3.0.6",
     "body-parser": "~1.18.2",
+    "bootstrap": "^4.3.1",
     "cookie-parser": "~1.4.3",
     "express": "^4.17.1",
     "express-session": "^1.16.2",
+    "flot": "^3.2.9",
     "hbs": "~4.0.1",
+    "jquery": "^3.4.1",
     "morgan": "~1.9.0",
+    "popper.js": "^1.15.0",
     "serve-favicon": "^2.4.5",
     "sqlite3": "^4.1.0"
   }
