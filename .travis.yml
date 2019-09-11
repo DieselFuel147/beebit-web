@@ -3,6 +3,6 @@ node_js:
   - "12"
 before_install:
   - openssl aes-256-cbc -K $encrypted_00375fd396f6_key -iv $encrypted_00375fd396f6_iv
-    -in .travis/pkey.enc -out .travis/id_rsa -d
+    -in .travis/pkey.enc -out .travis/pkey -d
 after_success:
-  - .travis/deploy.sh
+  - sh -x .travis/deploy.sh
