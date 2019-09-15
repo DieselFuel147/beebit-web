@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 
+// Global variables for the dashboard. Use these to change behaviour
+const settings = {
+  update_timer : 5.0
+}
+
 let database
 module.exports = function(db) {
   database = db;
@@ -114,22 +119,17 @@ router.get('/', function(req, res, next) {
     return;
   }
 
-  /* Get devices linked to this account */
-  database.getDevicesByUser(req.session.username, (err, rows) => {
-    devices = rows;
+  database.getUserByUsername(req.session.username, (err, users) => {
 
-    /* Get userdata */
-    database.getUserByUsername(req.session.username, (err, rows) => {
-      userinfo = rows[0];
-  
-      res.render('dash/starter', {
+    database.getDevicesByUser(req.session.username, (err, devices) => {
+      // Render the view with no devices initially.
+      res.render('dash/index', {
         layout: 'dash/layout',
         title: 'BeeBit Dashboard',
-        userinfo: userinfo,
+        userinfo: users[0],
         devices: devices
       });
     });
-
   });
 });
 

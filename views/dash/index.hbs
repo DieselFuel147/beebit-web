@@ -164,14 +164,14 @@
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding" id="deviceBox">
               <table class="table table-hover" id="statusTable">
-                <tr>
+                <thead>
                   <th>ID</th>
                   <th>Location</th>
                   <th>People Detecting</th>
                   <th>Last Update</th>
                   <th>Status</th>
                   <th>Information</th>
-                </tr>
+                </thead>
                 {{#if devices}}
                   {{#each devices}}
                   <tr id="mainTable{{@key}}">
@@ -184,34 +184,6 @@
                   </tr>
                   {{/each}}
                 {{/if}}
-                {{!-- <tr>
-                  <td>1</td>
-                  <td>Rear exit</td>
-                  <td>5</td>
-                  <td><span class="label label-success">Online</span></td>
-                  <td>The device is operating as expected.</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Front exit</td>
-                  <td>20</td>
-                  <td><span class="label label-warning">Low battery</span></td>
-                  <td>Device battery is running low.</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Main hallway</td>
-                  <td>0</td>
-                  <td><span class="label label-primary">Starting up</span></td>
-                  <td>The device is starting up.</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>Side hall 1</td>
-                  <td>0</td>
-                  <td><span class="label label-danger">Offline</span></td>
-                  <td>Unable to connect to device.</td>
-                </tr> --}}
               </table>
             </div>
           </div>
