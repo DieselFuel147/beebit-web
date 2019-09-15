@@ -1,8 +1,10 @@
 /* Drop schema */
+DROP TABLE IF EXISTS LOGS;
 DROP TABLE IF EXISTS DEVICES;
 DROP TABLE IF EXISTS USERS;
 DROP TABLE IF EXISTS KEYS;
 DROP TABLE IF EXISTS AUTHORITIES;
+DROP VIEW IF EXISTS DEVICE_STATUS;
 
 /* Create schema */
 CREATE TABLE AUTHORITIES(
@@ -29,14 +31,24 @@ CREATE TABLE DEVICES(
 	description	VARCHAR(300)    NOT NULL,
 	reg_date	VARCHAR(20)		NOT NULL, /* date device was linked */
 	last_update	VARCHAR(20)		NOT NULL, /* unix timestamp */
-	status		VARCHAR(50)		NOT NULL, /* could also just be integer status flag (maybe in the future) */
-	people		INTEGER			NOT NULL, /* # people detected in the last update */
 	CONSTRAINT DEVICES_FKEY FOREIGN KEY(username) REFERENCES USERS(username),
 	CONSTRAINT DEVICES_FKEY2 FOREIGN KEY(uuid) REFERENCES KEYS(key),
     CONSTRAINT DEVICES_PKEY PRIMARY KEY(uuid, username),
     CONSTRAINT DEVICES_UNIQUE UNIQUE(uuid));
     
-    
+CREATE TABLE LOGS(
+	id			INTEGER			PRIMARY KEY,
+	uuid		BLOB(16)		NOT NULL,
+	rtime		INTEGER			NOT NULL, /* Unix timestamp of the log */
+	people		INTEGER			NOT NULL,
+	dstatus		VARCHAR(50)		NOT NULL,
+	CONSTRAINT LOGS_FKEY FOREIGN KEY(uuid) REFERENCES DEVICES(uuid)
+);
+
+/* Device stats is comprised of the latest log */
+CREATE VIEW DEVICE_STATUS AS
+	SELECT * FROM DEVICES NATURAL JOIN (SELECT uuid, MAX(rtime) as time, people, dstatus FROM LOGS DESC GROUP BY uuid);
+
 /* Populate test data */
 INSERT INTO AUTHORITIES(authority) VALUES
 ("ADMIN"),
@@ -52,10 +64,15 @@ INSERT INTO KEYS(key) VALUES
 (X'3573871ba65032c9a7ae104979d55de9'),
 (X'a7050cd5aa819b5a3396ad26a7230bda');
 
-INSERT INTO DEVICES(username, uuid, description, reg_date, last_update, status, people) VALUES
-("ia000", X'ed5692a7965aa31cc775d7ef417c5f72', "room #1", '2019-01-18', '1565417874', 'linked', 0),
-("ia000", X'3573871ba65032c9a7ae104979d55de9', "room #2", '2019-02-14', '1565418166', 'linked', 0),
-("dj003", X'a7050cd5aa819b5a3396ad26a7230bda', "room #1", '2019-03-12', '1565414166', 'linked', 0);
+INSERT INTO DEVICES(username, uuid, description, reg_date, last_update) VALUES
+("ia000", X'ed5692a7965aa31cc775d7ef417c5f72', "room #1", '2019-01-18', '1565417874'),
+("ia000", X'3573871ba65032c9a7ae104979d55de9', "room #2", '2019-02-14', '1565418166'),
+("dj003", X'a7050cd5aa819b5a3396ad26a7230bda', "room #1", '2019-03-12', '1565414166');
+
+INSERT INTO LOGS(uuid, rtime, people, dstatus) VALUES
+(X'ed5692a7965aa31cc775d7ef417c5f72', 1568530995, 5, "detecting"),
+(X'ed5692a7965aa31cc775d7ef417c5f72', 1568532995, 2, "detecting"),
+(X'3573871ba65032c9a7ae104979d55de9', 1568532995, 10, "idle");
 
 /* extra keys */
 INSERT INTO KEYS (key) VALUES

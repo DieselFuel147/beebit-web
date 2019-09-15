@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 // Global variables for the dashboard. Use these to change behaviour
 const settings = {
-  update_timer : 5.0
+  update_timer : 1.0
 }
 
 let database
@@ -123,11 +123,13 @@ router.get('/', function(req, res, next) {
 
     database.getDevicesByUser(req.session.username, (err, devices) => {
       // Render the view with no devices initially.
+      console.log(devices);
       res.render('dash/index', {
         layout: 'dash/layout',
         title: 'BeeBit Dashboard',
         userinfo: users[0],
-        devices: devices
+        devices: devices,
+        dashSettings: settings
       });
     });
   });
@@ -183,8 +185,9 @@ router.post('/register-a-bee', function(req, res, next) {
 
   database.getDeviceByUUID(uuid, (err, rows) => {
     if (err || rows.length == 0) {
+      console.log(err);
       database.checkKeyAvailable(uuid, (err, rows) => {
-        if (err | rows.length == 0) {
+        if (err || rows.length == 0) {
           res.status(200).end('Invalid key');
         } else {
           database.addDevice(uuid, req.session.username, description, (err) => {

@@ -15,9 +15,8 @@ router.get('/stats', function (req, res, next) {
   }
   
   // Return a JSON document for the registered user with all specified devices for this user
-  database.getDevicesByUser(req.session.username, (err, rows) => {
+  database.getDeviceStatusesByUser(req.session.username, (err, rows) => {
     devices = rows;
-
     if (err) {
       res.status(404).end('Error fetching results.');
     } else {
@@ -33,15 +32,15 @@ router.get('/stats', function (req, res, next) {
 router.get('/stats/:deviceId', function(req, res, next) {
   var deviceUuid = req.params.deviceId;
 
-  database.getDeviceByUUID(deviceUuid, (err, rows) => {
+  database.getDevicesStatusByUUID(deviceUuid, (err, rows) => {
     if (err || rows.length == 0) {
       res.status(404).end('Device UUID not found.');
     } else {
       // Return a set of statistics for the device in a JSON document
       res.json({
         count: rows[0].people,
-        status: rows[0].status,
-        lastUpdate: rows[0].last_update
+        status: rows[0].dstatus,
+        lastUpdate: rows[0].rtime
       });
     }
   });

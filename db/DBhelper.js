@@ -41,15 +41,19 @@ Dbhelper.prototype.deleteUser = function(username, callback) {
 
 /* Functions on DEVICES table */
 Dbhelper.prototype.getDevicesByUser = function(username, callback) {
-    db.serialize(() => { db.all("SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update, status, people FROM DEVICES WHERE username = ?;", username, callback) });
+    db.serialize(() => { db.all("SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update FROM DEVICES WHERE username = ?;", username, callback) });
+};
+
+Dbhelper.prototype.getDeviceStatusesByUser = function(username, callback) {
+    db.serialize(() => { db.all("SELECT * FROM DEVICE_STATUS WHERE username = ?;", username, callback) });
 };
 
 Dbhelper.prototype.getAllDevices = function(callback) {
-    db.serialize(() => { db.all("SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update, status, people FROM DEVICES", callback) });
+    db.serialize(() => { db.all("SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update FROM DEVICES", callback) });
 };
 
 Dbhelper.prototype.getDeviceByUUID = function(uuid, callback) {
-    const sql = "SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update, status, people FROM DEVICES WHERE uuid = X'" + uuid + "';";
+    const sql = "SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update FROM DEVICES WHERE uuid = X'" + uuid + "';";
     db.serialize(() => { db.all(sql, callback) });
 };
 
@@ -68,12 +72,17 @@ Dbhelper.prototype.updateDeviceStatus = function(uuid, data, callback) {
     people_detected = 0;
     if (data.status) status = data.status;
     if (data.people) people_detected = data.people;
-    const sql = "INSERT INTO LOGS(time,people,status,uuid) VALUES (strftime('%s', 'now'),'"+people_detected+"','"+status+"',X'" + uuid + "');";
+    const sql = "INSERT INTO LOGS(uuid,rtime,people,dstatus) VALUES (X'" + uuid + "', strftime('%s', 'now'),'"+people_detected+"','"+status+"');";
     db.serialize(() => { db.run(sql, callback) });
 };
 
+Dbhelper.prototype.getDeviceStatusByUuid = function(uuid, callback) {
+    const sql = "SELECT * FROM DEVICE_STATUS WHERE uuid = ?;";
+    db.serialize(() => { db.all(sql, uuid, callback) });
+};
+
 Dbhelper.prototype.addDevice = function(uuid, user, description = "", callback) {
-    const sql = "INSERT INTO DEVICES(username, uuid, description, reg_date, last_update, status, people) VALUES(? , X'" + uuid + "', ?, date('now'), strftime('%s', 'now'), 'linked', 0);"
+    const sql = "INSERT INTO DEVICES(username, uuid, description, reg_date, last_update) VALUES(? , X'" + uuid + "', ?, date('now'), strftime('%s', 'now'));"
     db.serialize(() => { db.run(sql, user, description, callback) });
 };
 

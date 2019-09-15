@@ -15,7 +15,7 @@ except ImportError:
 update_interval = 0.1
 
 # The UUID would be read from a licence.txt file on the device
-uuid = 'ED5692A7965AA31CC775D7EF417C5F72'
+uuid = '7E7316505A9368F124884410CC9367CF'
 
 # The idea is there will be more entry points for things like bee/camerafeed ..etc
 base = 'http://127.0.0.1:3420/'
