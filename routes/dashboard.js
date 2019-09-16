@@ -16,7 +16,6 @@ module.exports = function(db) {
 /* GET login. */
 router.get('/login', function(req, res, next) {
   res.render('dash/login', {
-    layout: 'dash/layout',
     title: 'BeeBit Dashboard'
   });
 });
@@ -24,7 +23,6 @@ router.get('/login', function(req, res, next) {
 /* GET register. */
 router.get('/register', function(req, res, next) {
   res.render('dash/register', {
-    layout: 'dash/layout',
     title: 'BeeBit Dashboard'
   });
 });
@@ -61,48 +59,48 @@ router.post('/register', function(req, res, next) {
   });
 });
 
-  /* POST login. */
-  router.post('/login', function(req, res, next) {
-    if (req.session.username) {
-      res.end('You are already logged in as: ' + req.session.username + ' cookie expires in: ' + (req.session.cookie.maxAge / 1000));
-      return;
+/* POST login. */
+router.post('/login', function(req, res, next) {
+  if (req.session.username) {
+    res.end('You are already logged in as: ' + req.session.username + ' cookie expires in: ' + (req.session.cookie.maxAge / 1000));
+    return;
+  }
+
+  let username = req.body["username"];
+  let password = req.body["password"];
+  /* Find user */
+  database.getUserByUsername(username, function (err, rows) {
+    console.log("attempting search for: " + username + " " + password + " in db");
+    if (err) {
+      console.log ("db error");
+      console.error(err);
+    } 
+    else{
+        
+        rows.forEach(function(row) {
+          console.log ("found");
+          bcrypt.compare(password, row.passwd, function(err2, result) {
+            if (result === true)
+            {
+              console.log("Successful login: " + username);
+              req.session.username = row.username;
+              req.session.fname = row.fname;
+              req.session.lname = row.lname;
+              req.session.usertype = row.authority;
+              res.redirect("/dashboard");
+              res.end();
+            }
+            else {
+              res.end("Invalid password for user: " + username);
+            }
+            }); 
+        });
     }
-  
-    let username = req.body["username"];
-    let password = req.body["password"];
-    /* Find user */
-    database.getUserByUsername(username, function (err, rows) {
-      console.log("attempting search for: " + username + " " + password + " in db");
-      if (err) {
-        console.log ("db error");
-        console.error(err);
-      } 
-      else{
-          
-          rows.forEach(function(row) {
-            console.log ("found");
-            bcrypt.compare(password, row.passwd, function(err2, result) {
-              if (result === true)
-              {
-                console.log("Successful login: " + username);
-                req.session.username = row.username;
-                req.session.fname = row.fname;
-                req.session.lname = row.lname;
-                req.session.usertype = row.authority;
-                res.redirect("/dashboard");
-                res.end();
-              }
-              else {
-                res.end("Invalid password for user: " + username);
-              }
-              }); 
-         });
-      }
-      setTimeout(function(){ res.status(403).end("Invalid login"); }, 500);
-         
-    });
-    
+    setTimeout(function(){ res.status(403).end("Invalid login"); }, 500);
+        
   });
+  
+});
 
 /* GET logout. */
 router.get('/logout', function(req, res, next) {
@@ -152,9 +150,12 @@ router.get('/stats', function(req, res, next) {
 router.get('/bees/:beeId', function(req, res, next) {
   let beeId = req.params.beeId;
 
-  res.render('dash/bee1', {
-    layout: 'dash/layout',
-    title: 'BeeBit bee'
+  database.getDevicesByUser(req.session.username, function(err, devices) {
+    res.render('dash/logs', {
+      layout: 'dash/layout',
+      title: 'BeeBit bee',
+      devices: devices
+    });
   });
 });
 
@@ -167,7 +168,6 @@ router.get('/register-a-bee', function(req, res, next) {
   }
 
   res.render('dash/registerdevice', {
-    layout: 'dash/layout',
     title: 'BeeBit Dashboard'
   });
 });

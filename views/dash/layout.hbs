@@ -27,6 +27,103 @@
         <script src="/dist/js/demo.js"></script> <!-- AdminLTE for demo purposes -->   
     </head>
     
+
+<body class="hold-transition skin-yellow sidebar-mini">
+    <div class="wrapper">
+    <!-- Main Header -->
+    <header class="main-header">
+
+        <!-- Logo -->
+        <a href="" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>B</b>BT</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>BeeBit</b></span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+            </a>
+
+
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="hidden-xs">{{userinfo.fname}} {{userinfo.lname}}</span>
+                </a>
+                
+                <ul class="dropdown-menu menu">
+                    <li><a href="/dashboard/logout">Logout</a></li>
+                </ul>
+            </li>
+            </ul>
+        </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+        <!-- Sidebar user panel (optional) -->
+            <div class="image" id='sideImg' style="text-align:center;">
+            <img src="/BeeBitLogoTextless.png" width="150" alt="Logo Image">
+            </div>
+
+        <!-- search form (Optional) -->
+
+        <!-- /.search form -->
+
+        <!-- Sidebar Menu -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">Navigation</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>Hive Dashboard</span></a></li>
+            <li><a href="/dashboard/stats"><i class="fa fa-link"></i> <span>Statistics</span></a></li>
+            <li class="treeview">
+            <a href="#"><i class="fa fa-link"></i> <span>Your Bees</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                {{#if devices}}
+                {{#each devices}}
+                    <li><a href="/dashboard/bees/{{this.uuid}}">{{this.description}}</a></li>
+                {{/each}}
+                {{/if}}
+            </ul>
+            </li>
+            <li><a href="/dashboard/register-a-bee"><i class="fa fa-link"></i> <span>Register a bee</span></a></li>
+        </ul>
+        <!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
     {{{body}}}
 
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2019 <a href="index.html" style="color:#000000">BeeBit</a>.</strong> All rights reserved.
+    </footer>
+
+    <!-- Control Sidebar -->
+    
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+    </div>
+</body>
 </html>
