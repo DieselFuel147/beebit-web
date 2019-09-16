@@ -270,16 +270,29 @@
     }
 
     function displayDevice(deviceIndex, device) {
-      console.log(deviceIndex);
-      var labelSuccess = document.getElementById("label" + deviceIndex);
-      labelSuccess.className = "label label-success";
-      labelSuccess.innerHTML = "Detecting";
+      var labelUpdate = document.getElementById("update" + deviceIndex);
 
-      var status = document.getElementById("status" + deviceIndex);
-      status.innerHTML = device.dstatus;
-        
-      var people = document.getElementById("device" + deviceIndex);
-      people.innerHTML = device.people;
+      var newDate = new Date(device.time * 1000);
+      var oldDate = new Date(labelUpdate.innerHTML);
+
+      if (newDate > oldDate) {
+        var labelSuccess = document.getElementById("label" + deviceIndex);
+        labelSuccess.className = "label label-success";
+        labelSuccess.innerHTML = "Detecting";
+
+        labelUpdate.innerHTML = newDate.toLocaleDateString() + " " + newDate.toLocaleTimeString();
+
+        var status = document.getElementById("status" + deviceIndex);
+        status.innerHTML = device.dstatus;
+          
+        var people = document.getElementById("device" + deviceIndex);
+        people.innerHTML = device.people;
+
+      } else {
+        var fail = document.getElementById("label" + deviceIndex);  // Change to IDLE
+        fail.className = "label label-warning";
+        fail.innerHTML = "Idle";
+      }
     }
 
     function displayData(devices) {
