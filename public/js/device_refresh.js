@@ -15,8 +15,8 @@ var devices = {};
 
 function initialize() {
     var $fail = $("[id^=label]");
-    $fail.attr("class", "label label-warning");
-    $fail.html("Idle");
+    $fail.attr("class", "label label-danger");
+    $fail.html("Disconnected");
 }
 
 function displayDevice(deviceIndex, device) {
@@ -48,8 +48,8 @@ function displayDevice(deviceIndex, device) {
             
     } else {
         var fail = document.getElementById("label" + deviceIndex);  // Change to IDLE
-        fail.className = "label label-warning";
-        fail.innerHTML = "Idle";
+        fail.className = "label label-danger";
+        fail.innerHTML = "Disconnected";
     }
     StaticDeviceInfo.initialized = true;
 }
@@ -58,8 +58,16 @@ function displayData(devices) {
     StaticDeviceInfo.totalDevices = devices.devices.length;
     StaticDeviceInfo.activeDevices = 0;
     StaticDeviceInfo.totalDetected = 0;
+
+    if (devices == undefined || devices.length == 0) return;
+
     $.each(devices.devices, displayDevice);
 
+    devices.devices.sort(function(da, db) {
+        return da.people > db.people;
+    });
+
+    $("#mostPopular").html(devices.devices[0].description);
     $("#devicesCounter").html(`${StaticDeviceInfo.activeDevices}/${StaticDeviceInfo.totalDevices}`);
     $("#totalDetected").html(StaticDeviceInfo.totalDetected);
 }
