@@ -7,10 +7,29 @@ module.exports = function(db) {
   return router;
 };
 
+// Gets the average of all logs for a specific day
+router.get('/avg/:day', function(req, res, next) {
+  if (!req.session.username) {
+    res.sendStatus(403).end();
+    return;
+  }
+
+  var day = req.params.day;
+
+  database.getAverageForDay(day, req.session.username, function getAverage(err, data) {
+    if (err || data.length == 0) {
+      res.sendStatus(404).end();
+    } else {
+      res.json(data[0]);
+    }
+  });
+
+});
+
 // Returns statistics for all devices
 router.get('/stats', function (req, res, next) {
   if (!req.session.username) {
-    res.sendStatus(403).end();
+    res.status(403).end();
     return;
   }
   

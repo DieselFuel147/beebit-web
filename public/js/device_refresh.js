@@ -1,6 +1,7 @@
 var StaticDeviceInfo = {
     totalDevices : 0,
     activeDevices: 0,
+    totalDetected: 0,
     initialized: false
 };
 
@@ -39,21 +40,50 @@ function displayDevice(deviceIndex, device) {
         fail.innerHTML = "Idle";
     }
     StaticDeviceInfo.initialized = true;
+    StaticDeviceInfo.totalDetected += device.people;
 }
 
 function displayData(devices) {
     StaticDeviceInfo.totalDevices = devices.devices.length;
     StaticDeviceInfo.activeDevices = 0;
+    StaticDeviceInfo.totalDetected = 0;
     $.each(devices.devices, displayDevice);
 
     $("#devicesCounter").html(`${StaticDeviceInfo.activeDevices}/${StaticDeviceInfo.totalDevices}`);
+    $("#totalDetected").html(StaticDeviceInfo.totalDetected);
+}
+
+function displayIncrease(previousAverage, currentAverage) {
+    var percent = Math.round(((currentAverage/previousAverage) - 1.0) * 100);
+    if (percent > 0) {
+        percent = "+" + percent;
+    }
+    $("#diffYesterday").html(percent + '%');
+}
+
+function getDateStr(date) {
+    var dd = String(date.getDate()).padStart(2, '0' );
+    var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = date.getFullYear();
+
+    return yyyy + "-" + mm + "-" + dd;
 }
 
 // Get the beebit devices registered and update the list
 function makeRequest() {
     var updateLoc = location.protocol + "//" + location.host + "/bee/stats";
-    $.getJSON(updateLoc, displayData)  .fail(function(err) {
-    console.log( "error" + err);
+    $.getJSON(updateLoc, displayData).fail(function(err) {
+        console.log( "error" + err);
+    });
+
+    var avgLog = location.protocol + "//" + location.host + "/bee/avg/";
+    var today = new Date();
+    var yesterday = (new Date());
+    yesterday.setDate(today.getDate() - 1);
+    $.getJSON(avgLog + getDateStr(today), function(today) {
+        $.getJSON(avgLog + getDateStr(yesterday), function(yesterday) {
+            displayIncrease(yesterday.average, today.average);
+        });
     });
 }
 

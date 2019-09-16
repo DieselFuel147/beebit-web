@@ -57,6 +57,11 @@ Dbhelper.prototype.getDeviceByUUID = function(uuid, callback) {
     db.serialize(() => { db.all(sql, callback) });
 };
 
+Dbhelper.prototype.getAverageForDay = function(day, username, callback) {
+    const sql = "SELECT date(rtime, 'unixepoch', 'localtime') as day, AVG(people) as average FROM LOGS WHERE day=? AND uuid IN (SELECT uuid FROM DEVICES WHERE username = ?) GROUP BY day;";
+    db.serialize(() => { db.all(sql, day, username, callback) });
+}
+
 Dbhelper.prototype.deleteDeviceByUUID = function(uuid, callback) {
     const sql = "DELETE FROM DEVICES WHERE uuid = X'" + uuid + "';";
     db.serialize(() => { db.run(sql, callback) });
