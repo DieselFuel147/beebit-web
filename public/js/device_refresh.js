@@ -1,9 +1,17 @@
+
+var settings = {
+    inactiveTime: 30, // Time until a device is considered inactive, in seconds.
+    updateFrequency: 5 // Update frequency in seconds
+};
+
 var StaticDeviceInfo = {
     totalDevices : 0,
     activeDevices: 0,
     totalDetected: 0,
     initialized: false
 };
+
+var devices = {};
 
 function initialize() {
     var $fail = $("[id^=label]");
@@ -17,10 +25,14 @@ function displayDevice(deviceIndex, device) {
     var newDate = new Date(device.time * 1000);
     var oldDate = new Date(labelUpdate.innerHTML);
 
-    if (newDate > oldDate) {
+    // If the new date is newer or the time since the last detection is less than the inactive counter
+    var timeSinceLast = Math.floor(((new Date()) - newDate) / 1000);
+
+    if (newDate > oldDate || timeSinceLast < settings.inactiveTime) {
 
         if (StaticDeviceInfo.initialized) {
             StaticDeviceInfo.activeDevices++;
+            StaticDeviceInfo.totalDetected += device.people;
             var labelSuccess = document.getElementById("label" + deviceIndex);
             labelSuccess.className = "label label-success";
             labelSuccess.innerHTML = "Detecting";
@@ -40,7 +52,6 @@ function displayDevice(deviceIndex, device) {
         fail.innerHTML = "Idle";
     }
     StaticDeviceInfo.initialized = true;
-    StaticDeviceInfo.totalDetected += device.people;
 }
 
 function displayData(devices) {
@@ -90,5 +101,5 @@ function makeRequest() {
 
 $(function() {
     initialize();
-    setInterval(makeRequest, 1000);
+    setInterval(makeRequest, settings.updateFrequency*1000);
 });

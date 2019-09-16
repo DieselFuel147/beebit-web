@@ -54,7 +54,7 @@ Dbhelper.prototype.getAllDevices = function(callback) {
 
 Dbhelper.prototype.getDeviceByUUID = function(uuid, callback) {
     const sql = "SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update FROM DEVICES WHERE uuid = X'" + uuid + "';";
-    db.serialize(() => { db.all(sql, callback) });
+    db.serialize(() => { db.get(sql, callback) });
 };
 
 Dbhelper.prototype.getAverageForDay = function(day, username, callback) {

@@ -151,10 +151,18 @@ router.get('/bees/:beeId', function(req, res, next) {
   let beeId = req.params.beeId;
 
   database.getDevicesByUser(req.session.username, function(err, devices) {
-    res.render('dash/logs', {
-      layout: 'dash/layout',
-      title: 'BeeBit bee',
-      devices: devices
+    database.getDeviceByUUID(beeId, function(err, currentDevice) {
+      if (err) {
+        res.statusCode(404).end();
+        return;
+      }
+
+      res.render('dash/logs', {
+        layout: 'dash/layout',
+        title: 'View Log',
+        devices: devices,
+        currDevice: currentDevice
+      });
     });
   });
 });
@@ -183,8 +191,8 @@ router.post('/register-a-bee', function(req, res, next) {
   let uuid = req.body["uuid"];
   let description = req.body["description"];
 
-  database.getDeviceByUUID(uuid, (err, rows) => {
-    if (err || rows.length == 0) {
+  database.getDeviceByUUID(uuid, (err, device) => {
+    if (err || !device) {
       console.log(err);
       database.checkKeyAvailable(uuid, (err, rows) => {
         if (err || rows.length == 0) {
@@ -198,7 +206,7 @@ router.post('/register-a-bee', function(req, res, next) {
       });
     } else {
       msg = 'Key already in use';
-      if (rows[0].username == req.session.username) msg = 'The device is already linked to your account';
+      if (device.username == req.session.username) msg = 'The device is already linked to your account';
       res.status(200).end(msg);
     }
   });
