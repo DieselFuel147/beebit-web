@@ -15,7 +15,13 @@ module.exports = function(db) {
 
 /* GET login. */
 router.get('/login', function(req, res, next) {
+  if (req.session.username) {
+    res.redirect('/dashboard/');
+    return;
+  }
+
   res.render('dash/login', {
+    layout: 'dash/form_layout',
     title: 'BeeBit Dashboard'
   });
 });
@@ -23,6 +29,7 @@ router.get('/login', function(req, res, next) {
 /* GET register. */
 router.get('/register', function(req, res, next) {
   res.render('dash/register', {
+    layout: 'dash/form_layout',
     title: 'BeeBit Dashboard'
   });
 });
@@ -62,7 +69,7 @@ router.post('/register', function(req, res, next) {
 /* POST login. */
 router.post('/login', function(req, res, next) {
   if (req.session.username) {
-    res.end('You are already logged in as: ' + req.session.username + ' cookie expires in: ' + (req.session.cookie.maxAge / 1000));
+    res.redirect('/dashboard');
     return;
   }
 
@@ -121,7 +128,6 @@ router.get('/', function(req, res, next) {
 
     database.getDevicesByUser(req.session.username, (err, devices) => {
       // Render the view with no devices initially.
-      console.log(devices);
       res.render('dash/index', {
         layout: 'dash/layout',
         title: 'BeeBit Dashboard',
@@ -139,9 +145,12 @@ router.get('/stats', function(req, res, next) {
     res.redirect("/dashboard/login");
     return;
   }
-  res.render('dash/stats', {
-    layout: 'dash/layout',
-    title: 'BeeBit Stats'
+  database.getDevicesByUser(req.session.username, (err, devices) => {
+    res.render('dash/stats', {
+      layout: 'dash/layout',
+      title: 'BeeBit Stats',
+      devices: devices
+    });
   });
 });
 
@@ -176,6 +185,7 @@ router.get('/register-a-bee', function(req, res, next) {
   }
 
   res.render('dash/registerdevice', {
+    layout: 'dash/form_layout',
     title: 'BeeBit Dashboard'
   });
 });

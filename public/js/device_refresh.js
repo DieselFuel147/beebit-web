@@ -51,7 +51,6 @@ function displayDevice(deviceIndex, device) {
         fail.className = "label label-danger";
         fail.innerHTML = "Disconnected";
     }
-    StaticDeviceInfo.initialized = true;
 }
 
 function displayData(devices) {
@@ -70,6 +69,7 @@ function displayData(devices) {
     $("#mostPopular").html(devices.devices[0].description);
     $("#devicesCounter").html(`${StaticDeviceInfo.activeDevices}/${StaticDeviceInfo.totalDevices}`);
     $("#totalDetected").html(StaticDeviceInfo.totalDetected);
+    StaticDeviceInfo.initialized = true;
 }
 
 function displayIncrease(previousAverage, currentAverage) {
@@ -109,5 +109,6 @@ function makeRequest() {
 
 $(function() {
     initialize();
+    makeRequest();
     setInterval(makeRequest, settings.updateFrequency*1000);
 });
