@@ -67,6 +67,13 @@ Dbhelper.prototype.deleteDeviceByUSER = function(username, callback) {
     db.serialize(() => { db.all(sql, username, callback) });
 };
 
+Dbhelper.prototype.getDeviceStatisticsByUser = function(enddate, user, days, callback) {
+    const sql = `SELECT LOGS.uuid as uuid, description, AVG(people) as average, MAX(people) as max, ? as endDate
+                    FROM LOGS JOIN DEVICES ON LOGS.uuid = DEVICES.uuid
+                    WHERE date(rtime,'unixepoch','localtime') BETWEEN date(endDate, '-${days} days') AND endDate AND username=? GROUP BY LOGS.uuid;`
+    db.serialize(() => { db.get(sql, enddate, days, user, callback) });
+};
+
 Dbhelper.prototype.getDeviceStatisticsByUuid = function(uuid, enddate, days, callback) {
     const sql = "SELECT AVG(people) as average, MAX(people) as max, ? as endDate FROM LOGS WHERE date(rtime,'unixepoch','localtime') BETWEEN date(endDate, '-" + days + " days') AND endDate AND uuid = ?;"
     db.serialize(() => { db.get(sql, enddate, uuid, callback) });
