@@ -7,8 +7,22 @@ module.exports = function(db) {
   return router;
 };
 
+function userHasDevice(username, uuid) {
+  return new Promise(function (resolve, reject) {
+    database.getDevicesByUser(username, (err, devices) => {
+      if (devices.some(function(device) {
+        device.uuid === uuid;
+      })) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
 // Gets the average of all logs for a specific day
-router.get('/avg/:day', function(req, res, next) {
+router.get('/avg/day/:day', function(req, res, next) {
   if (!req.session.username) {
     res.sendStatus(403).end();
     return;
@@ -18,7 +32,7 @@ router.get('/avg/:day', function(req, res, next) {
 
   database.getAverageForDay(day, req.session.username, function getAverage(err, data) {
     if (err || data.length == 0) {
-      res.sendStatus(404).end();
+      res.status(404).end('No records exist for day.');
     } else {
       res.json(data[0]);
     }
@@ -26,8 +40,26 @@ router.get('/avg/:day', function(req, res, next) {
 
 });
 
-// Returns statistics for all devices
-router.get('/stats', function (req, res, next) {
+// Gets the average detection for an entire week, ending on the specified day
+router.get('/avg/week/:day', function(req, res, next) {
+  if (!req.session.username) {
+    res.sendStatus(403).end();
+    return;
+  }
+
+  var day = req.params.day;
+
+  database.getAverageForWeek(week, req.session.username, function getAverage(err, week) {
+    if (err) {
+      res.statud(404).end('No records exist for week.');
+    } else {
+      res.json(week);
+    }
+  });
+});
+
+// Returns status for all devices for the specified user
+router.get('/status', function (req, res, next) {
   if (!req.session.username) {
     res.status(403).end();
     return;
@@ -48,19 +80,30 @@ router.get('/stats', function (req, res, next) {
 });
 
 // Returns statistics for a single device
-router.get('/stats/:deviceId', function(req, res, next) {
-  var deviceUuid = req.params.deviceId;
+router.post('/stats/', async function(req, res, next) {
+  if (!req.session.username) {
+    res.sendStatus(403).end();
+    return;
+  }
 
-  database.getDevicesStatusByUUID(deviceUuid, (err, rows) => {
-    if (err || rows.length == 0) {
+  if (!req.body) {
+    res.status(400).end('Provide a valid date body');
+    return;
+  }
+
+  var hasDevice = await userHasDevice(req.session.username, req.body.uuid);
+
+  if (!hasDevice) {
+    res.status(403).end('User not registered to device.');
+    return;
+  }
+
+  database.getDevicesStatisticsByUUID(req.uuid, req.body.enddate, req.body.days, (err, stats) => {
+    if (err) {
       res.status(404).end('Device UUID not found.');
     } else {
       // Return a set of statistics for the device in a JSON document
-      res.json({
-        count: rows[0].people,
-        status: rows[0].dstatus,
-        lastUpdate: rows[0].rtime
-      });
+      res.json(stats);
     }
   });
 

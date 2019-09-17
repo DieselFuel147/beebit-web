@@ -13,6 +13,11 @@ var StaticDeviceInfo = {
 
 var devices = {};
 
+var hostname = location.protocol + "//" + location.host;
+var updateLoc = hostname + "/bee/status";
+var avgLog = hostname + "/bee/avg/day/";
+var statsLoc = hostname + "/bee/stats/";
+
 function initialize() {
     var $fail = $("[id^=label]");
     $fail.attr("class", "label label-danger");
@@ -53,6 +58,10 @@ function displayDevice(deviceIndex, device) {
     }
 }
 
+function sortDevices(da, db) {
+    return da.people < db.people;
+}
+
 function displayData(devices) {
     StaticDeviceInfo.totalDevices = devices.devices.length;
     StaticDeviceInfo.activeDevices = 0;
@@ -62,9 +71,7 @@ function displayData(devices) {
 
     $.each(devices.devices, displayDevice);
 
-    devices.devices.sort(function(da, db) {
-        return da.people < db.people;
-    });
+    devices.devices.sort(sortDevices);
 
     $("#mostPopular").html(devices.devices[0].description);
     $("#devicesCounter").html(`${StaticDeviceInfo.activeDevices}/${StaticDeviceInfo.totalDevices}`);
@@ -90,12 +97,10 @@ function getDateStr(date) {
 
 // Get the beebit devices registered and update the list
 function makeRequest() {
-    var updateLoc = location.protocol + "//" + location.host + "/bee/stats";
     $.getJSON(updateLoc, displayData).fail(function(err) {
         console.log( "error" + err);
     });
 
-    var avgLog = location.protocol + "//" + location.host + "/bee/avg/";
     var today = new Date();
     var yesterday = (new Date());
     yesterday.setDate(today.getDate() - 1);
@@ -106,9 +111,46 @@ function makeRequest() {
     });
 }
 
+function displayRanks(devices) {
+    var outHtml = ""; 
+    var devices = devices.devices;
+
+    devices.sort(sortDevices);
+
+    var totalPeople = devices.reduce(function (total, curr) {
+        return total.people + curr.people;
+    });
+
+    console.log(totalPeople);
+    var counter = 1;
+    for (d in devices) {
+        outHtml += "<tr>"
+        outHtml += `<td>#${counter}</td>`
+        outHtml += `<td>${devices[d].description}</td>`
+        outHtml += `<td>${devices[d].people}</td>`
+        outHtml += `<td>${Math.round(devices[d].people/totalPeople*100)}%</td>`
+        outHtml += `<td><a href="${hostname + "/dashboard/bees/" + devices[d].uuid}">Bee ${devices[d].uuid} </a></td>`
+        outHtml += "</tr>"
+        counter++;
+    }
+
+    $("#rankTable").html(outHtml);
+}
+
+function fillRankTable() {
+    // Generate a new table of the devices and their relative rankings
+    var newVal = $("#rankTimeSelect").val();
+    
+    $.getJSON(updateLoc, displayRanks).fail(function(err) {
+        console.log( "error" + err);
+    });
+}
+
+$("#rankTimeSelect").change(fillRankTable);
 
 $(function() {
     initialize();
     makeRequest();
     setInterval(makeRequest, settings.updateFrequency*1000);
+    fillRankTable();
 });

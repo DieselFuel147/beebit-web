@@ -118,11 +118,11 @@
 
             <div class="box-tools pull-right">
               <div class="form-group">
-                <select id="pieSelect" class="form-control" aria-label="Traffic time selection">
-                  <option data-date="Today" id="tabletoday">Today</option>
-                  <option data-date="Week" id="tableweek">This week</option>
-                  <option>This month</option>
-                  <option>This year</option>
+                <select id="rankTimeSelect" class="form-control" aria-label="Traffic time selection">
+                  <option value="today">Today</option>
+                  <option value="week">This week</option>
+                  <option value="month">This month</option>
+                  <option value="year">This year</option>
                 </select>
               </div>
             </div>
@@ -130,28 +130,30 @@
           <!-- /.box-header -->
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
-              <tbody id="deviceInfo"><tr>
-                <th>Ranking</th>
-                <th>Location</th>
-                <th>Total People</th>
-                <th>Percentage of Traffic</th>
-                <th>Operating Device</th>
-              </tr>
-              {{#if devices}}
-                {{#each devices}}
-                  <tr>
-                    <td>#{{@key}}</td>
-                    <td>{{this.description}}</td>
-                    <td>145</td>
-                    <td>45%</td>
-                    <td>
-                      <a href="/dashboard/bees/{{this.uuid}}">
-                      <div style="height:100%";"width:100%">Bee #{{this.uuid}}</div>
-                    </td>
-                  </tr>
-                {{/each}}
-              {{/if}}
-            </tbody>
+              <thead>
+                <th>
+                  <th>Location</th>
+                  <th>Average People</th>
+                  <th>Percentage of Traffic</th>
+                  <th>Operating Device</th>
+                </th>
+              </thead>
+              <tbody id="rankTable">
+                {{#if devices}}
+                  {{#each devices}}
+                    <tr>
+                      <td>#{{@key}}</td>
+                      <td>{{this.description}}</td>
+                      <td>145</td>
+                      <td>45%</td>
+                      <td>
+                        <a href="/dashboard/bees/{{this.uuid}}">
+                        <div style="height:100%";"width:100%">Bee #{{this.uuid}}</div>
+                      </td>
+                    </tr>
+                  {{/each}}
+                {{/if}}
+              </tbody>
             </table>
           </div>
           <!-- /.box-body -->

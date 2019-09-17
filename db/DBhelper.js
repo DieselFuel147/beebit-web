@@ -45,7 +45,7 @@ Dbhelper.prototype.getDevicesByUser = function(username, callback) {
 };
 
 Dbhelper.prototype.getDeviceStatusesByUser = function(username, callback) {
-    db.serialize(() => { db.all("SELECT * FROM DEVICE_STATUS WHERE username = ?;", username, callback) });
+    db.serialize(() => { db.all("SELECT username, hex(uuid) as uuid, description, reg_date, time, people, dstatus FROM DEVICE_STATUS WHERE username = ?;", username, callback) });
 };
 
 Dbhelper.prototype.getAllDevices = function(callback) {
@@ -57,11 +57,6 @@ Dbhelper.prototype.getDeviceByUUID = function(uuid, callback) {
     db.serialize(() => { db.get(sql, callback) });
 };
 
-Dbhelper.prototype.getAverageForDay = function(day, username, callback) {
-    const sql = "SELECT date(rtime, 'unixepoch', 'localtime') as day, AVG(people) as average FROM LOGS WHERE day=? AND uuid IN (SELECT uuid FROM DEVICES WHERE username = ?) GROUP BY day;";
-    db.serialize(() => { db.all(sql, day, username, callback) });
-}
-
 Dbhelper.prototype.deleteDeviceByUUID = function(uuid, callback) {
     const sql = "DELETE FROM DEVICES WHERE uuid = X'" + uuid + "';";
     db.serialize(() => { db.run(sql, callback) });
@@ -72,6 +67,27 @@ Dbhelper.prototype.deleteDeviceByUSER = function(username, callback) {
     db.serialize(() => { db.all(sql, username, callback) });
 };
 
+Dbhelper.prototype.getDeviceStatisticsByUuid = function(uuid, enddate, days, callback) {
+    const sql = "SELECT AVG(people) as average, MAX(people) as max, ? as endDate FROM LOGS WHERE date(rtime,'unixepoch','localtime') BETWEEN date(endDate, '-" + days + " days') AND endDate AND uuid = ?;"
+    db.serialize(() => { db.get(sql, enddate, uuid, callback) });
+};
+
+Dbhelper.prototype.addDevice = function(uuid, user, description = "", callback) {
+    const sql = "INSERT INTO DEVICES(username, uuid, description, reg_date, last_update) VALUES(? , X'" + uuid + "', ?, date('now'), strftime('%s', 'now'));"
+    db.serialize(() => { db.run(sql, user, description, callback) });
+};
+
+/* Functions on the LOGS table (Records from a device) */
+Dbhelper.prototype.getAverageForDay = function(day, username, callback) {
+    const sql = "SELECT date(rtime, 'unixepoch', 'localtime') as day, AVG(people) as average FROM LOGS WHERE day=? AND uuid IN (SELECT uuid FROM DEVICES WHERE username = ?) GROUP BY day;";
+    db.serialize(() => { db.all(sql, day, username, callback) });
+}
+
+Dbhelper.prototype.getAverageForWeek = function(weekEnd, username, callback) {
+    const sql = "SELECT AVG(people) as average, ? as endDate FROM LOGS WHERE date(rtime,'unixepoch','localtime') BETWEEN date(endDate, '-7 days') AND endDate AND uuid IN (SELECT uuid FROM DEVICES WHERE username = ?);";
+    db.serialize(() => { db.get(sql, weekEnd, username, callback) });
+}
+
 Dbhelper.prototype.updateDeviceStatus = function(uuid, data, callback) {
     status =  "unknown";
     people_detected = 0;
@@ -79,16 +95,6 @@ Dbhelper.prototype.updateDeviceStatus = function(uuid, data, callback) {
     if (data.people) people_detected = data.people;
     const sql = "INSERT INTO LOGS(uuid,rtime,people,dstatus) VALUES (X'" + uuid + "', strftime('%s', 'now'),'"+people_detected+"','"+status+"');";
     db.serialize(() => { db.run(sql, callback) });
-};
-
-Dbhelper.prototype.getDeviceStatusByUuid = function(uuid, callback) {
-    const sql = "SELECT * FROM DEVICE_STATUS WHERE uuid = ?;";
-    db.serialize(() => { db.all(sql, uuid, callback) });
-};
-
-Dbhelper.prototype.addDevice = function(uuid, user, description = "", callback) {
-    const sql = "INSERT INTO DEVICES(username, uuid, description, reg_date, last_update) VALUES(? , X'" + uuid + "', ?, date('now'), strftime('%s', 'now'));"
-    db.serialize(() => { db.run(sql, user, description, callback) });
 };
 
 Dbhelper.prototype.checkKeyAvailable = function(uuid, callback) {
