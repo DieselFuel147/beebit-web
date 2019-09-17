@@ -64,7 +64,7 @@ function displayData(devices) {
     $.each(devices.devices, displayDevice);
 
     devices.devices.sort(function(da, db) {
-        return da.people > db.people;
+        return da.people < db.people;
     });
 
     $("#mostPopular").html(devices.devices[0].description);

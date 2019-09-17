@@ -17,10 +17,11 @@ except ImportError:
 update_interval = 0.1
 
 # The UUID would be read from a licence.txt file on the device
+#uuid = 'E4835A3939692228256918FBBD5F3A2C'
 uuid = '7E7316505A9368F124884410CC9367CF'
 
 # The idea is there will be more entry points for things like bee/camerafeed ..etc
-base = 'http://app.beebithive.com/'
+base = 'http://127.0.0.1:3420/'
 update_url = base + 'bee/update'
 
 
@@ -29,7 +30,7 @@ def update(status):
     c.setopt(c.URL, update_url)
     c.setopt(c.WRITEFUNCTION, buffer.write)
 
-    post_data = {'uuid': uuid, 'status': status, 'people': random.randint(0, 20)}
+    post_data = {'uuid': uuid, 'status': status, 'people': random.randint(0, 50)}
     c.setopt(c.POSTFIELDS, urlencode(post_data))
 
     c.perform()
