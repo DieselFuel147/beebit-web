@@ -35,6 +35,14 @@ const bee = require('./routes/bee')(db);
 
 process.title = "beebit-web";
 
+process.on('unhandledRejection', function(err) {
+  console.log(err);
+});
+
+process.on('unhandledException', function(err) {
+  console.log(err);
+});
+
 /* View engine setup */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');

@@ -111,14 +111,17 @@ function makeRequest() {
     });
 }
 
+function sortAverages(da, db) {
+    return da.average < db.average;
+}
+
 function displayRanks(devices) {
     var outHtml = ""; 
-    var devices = devices.devices;
 
-    devices.sort(sortDevices);
+    devices.sort(sortAverages);
 
     var totalPeople = devices.reduce(function (total, curr) {
-        return total.people + curr.people;
+        return total.average + curr.average;
     });
 
     console.log(totalPeople);
@@ -127,8 +130,9 @@ function displayRanks(devices) {
         outHtml += "<tr>"
         outHtml += `<td>#${counter}</td>`
         outHtml += `<td>${devices[d].description}</td>`
-        outHtml += `<td>${devices[d].people}</td>`
-        outHtml += `<td>${Math.round(devices[d].people/totalPeople*100)}%</td>`
+        outHtml += `<td>${devices[d].average.toFixed(2)}</td>`
+        outHtml += `<td>${devices[d].max}</td>`
+        outHtml += `<td>${Math.round(devices[d].average/totalPeople*100)}%</td>`
         outHtml += `<td><a href="${hostname + "/dashboard/bees/" + devices[d].uuid}">Bee ${devices[d].uuid} </a></td>`
         outHtml += "</tr>"
         counter++;
@@ -141,8 +145,20 @@ function fillRankTable() {
     // Generate a new table of the devices and their relative rankings
     var newVal = $("#rankTimeSelect").val();
     
-    $.getJSON(updateLoc, displayRanks).fail(function(err) {
-        console.log( "error" + err);
+    var today = getDateStr(new Date());
+    var time = 1;
+    if (newVal == "week") {
+        time = 7;
+    } else if (newVal == "month") {
+        time = 30;
+    } else if (newVal == "year") {
+        time = 365;
+    }
+
+    var request = statsLoc + today + "/" + time;
+    console.log(request);
+    $.getJSON(request, displayRanks).fail(function(err) {
+        console.log(err);
     });
 }
 
