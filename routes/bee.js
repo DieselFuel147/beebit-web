@@ -147,22 +147,19 @@ router.post('/stats/:deviceId', async function(req, res, next) {
 
 /* POST update. */
 router.post('/update', function(req, res, next) {
-  
-  /* If there is no session */
-  if (!req.session.uuid) {
-    /* Create session from sent uuid */ 
-    database.getDeviceByUUID(req.body.uuid, (err, device) => {
-      if (err || !device) {
-        res.status(404).end('device uuid not found or not registered to an account.');
-      } else {
-        req.session.uuid = device.uuid;
-        database.updateDeviceStatus(req.session.uuid, req.body);
-        res.status(200).end('status updated');
-      }
-    });
+  if (!req.body.uuid) {
+    res.sendStatus(403);
     return;
   }
 
-  database.updateDeviceStatus(req.session.uuid, req.body);
-  res.status(200).end('status updated');
+  /* Create session from sent uuid */ 
+  database.getDeviceByUUID(req.body.uuid, (err, device) => {
+    if (err || !device) {
+      res.status(404).end('device uuid not found or not registered to an account.');
+    } else {
+      database.updateDeviceStatus(req.body.uuid, req.body);
+      res.status(200).end('status updated');
+    }
+  });
+
 });
