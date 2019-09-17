@@ -26,11 +26,9 @@ function getUserDeviceStats(username, enddate, days) {
     database.getDeviceStatisticsByUser(username, enddate, days, (err, stats) => {
       if (err) {
         reject(new Error("Error retrieving device stats", err));
-        console.log(err);
         return;
       }
       resolve(stats);
-      console.log(stats);
     });
   });
 }
@@ -102,13 +100,11 @@ router.get('/stats/:endDate/:days', async function(req, res, next) {
 
   try {
     var deviceStats = await getUserDeviceStats(req.session.username, req.params.endDate, req.params.days);
-    console.log(deviceStats);
 
     res.json(deviceStats);
 
   } catch(e) {
     res.sendStatus(403);
-    console.log(e);
   }
 
 });
@@ -152,7 +148,6 @@ router.post('/update', function(req, res, next) {
     return;
   }
 
-  /* Create session from sent uuid */ 
   database.getDeviceByUUID(req.body.uuid, (err, device) => {
     if (err || !device) {
       res.status(404).end('device uuid not found or not registered to an account.');
