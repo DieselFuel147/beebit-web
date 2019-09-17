@@ -72,6 +72,29 @@ router.get('/avg/week/:day', function(req, res, next) {
   });
 });
 
+router.get('/status/total', function(req, res, next) {
+  // Get the current total of all devices
+  if (!req.session.username) {
+    res.status(403).end('Not logged in');
+    return;
+  }
+
+  database.getDeviceStatusesByUser(req.session.username, function(err, devices) {
+    if (err || devices.length == 0) {
+      res.status(404).end('No Devices');
+      return;
+    }
+
+    var totalPeopleCount = devices.reduce(function(valueA, valueB) {
+      return valueA.people + valueB.people;
+    });
+
+    res.json({
+      count: totalPeopleCount
+    }).end();
+  });
+});
+
 // Returns status for all devices for the specified user
 router.get('/status', function (req, res, next) {
   if (!req.session.username) {

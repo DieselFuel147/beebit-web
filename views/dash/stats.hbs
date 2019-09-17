@@ -97,38 +97,42 @@
      */
     // We use an inline data source in the example, usually data would
     // be fetched from a server
-    var data = [], totalPoints = 20
+    var data = [], totalPoints = 15
 
-    function getRandomData() {
+    var hostname = location.protocol + "//" + location.host;
 
-      if (data.length > 0)
-        data = data.slice(1)
+    function updateTotal(total) {
+      console.log(total.count);
 
-      // Do a random walk
-      while (data.length < totalPoints) {
+      data.push(total.count);
 
-        var prev = data.length > 0 ? data[data.length - 1] : 10,
-            y    = prev + Math.random() * 2 - 1
-
-        if (y < 0) {
-          y = 0
-        } else if (y > 20) {
-          y = 20
-        }
-
-        data.push(y)
+      if (data.length > totalPoints+1) {
+        data.shift();
       }
 
-      // Zip the generated y values with the x values
-      var res = []
-      for (var i = 0; i < data.length; ++i) {
-        res.push([i, data[i]])
+      var newArr = [];
+      for (var i = 0; i < data.length; i++) {
+        newArr.push([i, data[i]]);
       }
 
-      return res
+      console.log(newArr);
+      interactive_plot.setData([newArr]);
+
+      // Since the axes don't change, we don't need to call plot.setupGrid()
+      interactive_plot.draw()
     }
 
-    var interactive_plot = $.plot('#interactive', [getRandomData()], {
+    function getCurrentTotalCount() {
+
+      $.getJSON(`${hostname}/bee/status/total`, updateTotal);
+
+    }
+
+    $(function() {
+      setInterval(getCurrentTotalCount, 1000);
+    });
+
+    var interactive_plot = $.plot('#interactive', data, {
       grid  : {
         borderColor: '#f3f3f3',
         borderWidth: 1,
@@ -144,28 +148,19 @@
       },
       yaxis : {
         min : 0,
+        max: 100,
         show: true
       },
       xaxis : {
+        max: totalPoints,
         show: false
       }
-    })
-
-    var updateInterval = 500 //Fetch data ever x milliseconds
-    var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
-    function update() {
-
-      interactive_plot.setData([getRandomData()])
-
-      // Since the axes don't change, we don't need to call plot.setupGrid()
-      interactive_plot.draw()
-      if (realtime === 'on')
-        setTimeout(update, updateInterval)
-    }
+    });
 
     //INITIALIZE REALTIME DATA FETCHING
+    /*
     if (realtime === 'on') {
-      update()
+      pdateTotal()
     }
     //REALTIME TOGGLE
     $('#realtime .btn').click(function () {
@@ -175,8 +170,9 @@
       else {
         realtime = 'off'
       }
-      update()
-    });
+      updateTotal();
+    });*/
+
     var donutData = [
    { label: 'Side Entance', data: 70, color: '#3c8dbc' },
    { label: 'Rear Entrance', data: 20, color: '#0073b7' },

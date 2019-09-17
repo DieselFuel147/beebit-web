@@ -21,7 +21,7 @@ update_interval = 0.1
 uuid = '7E7316505A9368F124884410CC9367CF'
 
 # The idea is there will be more entry points for things like bee/camerafeed ..etc
-base = 'http://127.0.0.1:3420/'
+base = 'http://localhost:3420/'
 update_url = base + 'bee/update'
 
 
