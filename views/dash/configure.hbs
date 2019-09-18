@@ -1,0 +1,46 @@
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Device Configuration for {{currDevice.description}}
+        <small>Adjust parameters for your beebit-iot device!</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Configuration</a></li>
+      </ol>
+    </section>
+
+    <span id="beeID" class="hidden">{{uuid}}</span>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Options</h3>
+            </div>
+            <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <thead>
+                <th>option</th>
+                <th>value</th>
+              </thead>
+              <tbody id="configForm">
+              </tbody>
+            </table>
+            
+            <button type="button" id="submitconfig" class="btn btn-default btn-lg pull-right">
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
+            </button>
+          </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <!-- /.content-wrapper -->
+  <script type="text/javascript" src="/js/device_configure.js"></script>

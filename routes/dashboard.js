@@ -155,7 +155,6 @@ router.get('/stats', function(req, res, next) {
 });
 
 /* GET view specific bee. */
-// TODO
 router.get('/bees/:beeId', function(req, res, next) {
   let beeId = req.params.beeId;
 
@@ -176,6 +175,64 @@ router.get('/bees/:beeId', function(req, res, next) {
   });
 });
 
+/* GET configure bee. */
+router.get('/bees/:beeId/configure', function(req, res, next) {
+  if (!req.session.username) {
+    res.redirect("/dashboard/login");
+    return;
+  }
+  let beeId = req.params.beeId;
+
+  database.getDevicesByUser(req.session.username, function(err, devices) {
+    database.getDeviceByUUID(beeId, function(err, currentDevice) {
+      if (err) {
+        res.statusCode(404).end();
+        return;
+      }
+
+      res.render('dash/configure', {
+        layout: 'dash/layout',
+        title: 'Configure',
+        uuid: beeId,
+        devices: devices,
+        currDevice: currentDevice
+      });
+    });
+  });
+});
+
+/* POST configure bee - update config */
+router.post('/bees/:beeId/configure', function(req, res, next) {
+  let beeId = req.params.beeId;
+  let config = req.body["config"];
+
+  if (!beeId) {
+    res.status(400).end("beeID required");
+    return;
+  }
+  if (config == undefined) {
+    res.status(400).end("no config data was passed");
+    return;
+  }
+
+  database.getDevicesByUser(req.session.username, function(err, devices) {
+    database.getDeviceByUUID(beeId, function(err, currentDevice) {
+      if (err) {
+        res.status(404).end("device not found");
+        return;
+      }
+
+      database.setDeviceConfigByUUID(beeId, config, function (err) {
+        if (err) {
+          res.status(500).end('Failed to update config');
+          return;
+        }
+        res.status(200).end("Config update success");
+      })
+    });
+  });
+});
+
 
 /* GET register. */
 router.get('/register-a-bee', function(req, res, next) {
@@ -190,6 +247,7 @@ router.get('/register-a-bee', function(req, res, next) {
   });
 });
 
+const default_config = 'frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50'
 /* POST register. */
 router.post('/register-a-bee', function(req, res, next) {
   if (!req.session.username) {
@@ -208,7 +266,8 @@ router.post('/register-a-bee', function(req, res, next) {
         if (err || rows.length == 0) {
           res.status(200).end('Invalid key');
         } else {
-          database.addDevice(uuid, req.session.username, description, (err) => {
+          config = ('uuid=' + uuid  + '|' + default_config);
+          database.addDevice(uuid, req.session.username, description, config, (err) => {
             if (err) res.status(500).end('error adding device')
             else res.redirect("/dashboard");
           })

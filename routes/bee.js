@@ -181,3 +181,35 @@ router.post('/update', function(req, res, next) {
   });
 
 });
+
+router.get('/:deviceId/config/:json?', async function(req, res, next) {
+  if (!req.session.username) {
+    res.status(403).end('Not logged in');
+    return;
+  }
+  var deviceId = req.params.deviceId;
+  var inJson = req.params.json;
+
+  database.getDeviceConfigByUUID(deviceId, function(err, result) {
+    if (err || result.config.length == 0) {
+      res.status(404).end('No config');
+      return;
+    }
+
+    if (inJson) {
+      var d = {};
+      result.config.split('|').forEach(e => {
+        e = e.split('=');
+        d[e[0]] = e[1];
+      });
+
+      res.json(d).end();
+    } else {
+      var d = "";
+      result.config.split('|').forEach(e => {
+        d += e + '\n';
+      });
+    }
+    res.end(d);
+  });
+});

@@ -57,6 +57,16 @@ Dbhelper.prototype.getDeviceByUUID = function(uuid, callback) {
     db.serialize(() => { db.get(sql, callback) });
 };
 
+Dbhelper.prototype.getDeviceConfigByUUID = function(uuid, callback) {
+    const sql = "SELECT config FROM DEVICES WHERE uuid = X'" + uuid + "';";
+    db.serialize(() => { db.get(sql, callback) });
+};
+
+Dbhelper.prototype.setDeviceConfigByUUID = function(uuid, new_config, callback) {
+    const sql = "UPDATE DEVICES SET config = ? WHERE uuid = X'" + uuid + "';";
+    db.serialize(() => { db.run(sql, new_config, callback) });
+};
+
 Dbhelper.prototype.deleteDeviceByUUID = function(uuid, callback) {
     const sql = "DELETE FROM DEVICES WHERE uuid = X'" + uuid + "';";
     db.serialize(() => { db.run(sql, callback) });
@@ -79,9 +89,9 @@ Dbhelper.prototype.getDeviceStatisticsByUuid = function(uuid, enddate, days, cal
     db.serialize(() => { db.get(sql, enddate, uuid, callback) });
 };
 
-Dbhelper.prototype.addDevice = function(uuid, user, description = "", callback) {
-    const sql = "INSERT INTO DEVICES(username, uuid, description, reg_date, last_update) VALUES(? , X'" + uuid + "', ?, date('now'), strftime('%s', 'now'));"
-    db.serialize(() => { db.run(sql, user, description, callback) });
+Dbhelper.prototype.addDevice = function(uuid, user, description = "", config, callback) {
+    const sql = "INSERT INTO DEVICES(username, uuid, description, reg_date, last_update, config) VALUES(? , X'" + uuid + "', ?, date('now'), strftime('%s', 'now'), ?);"
+    db.serialize(() => { db.run(sql, user, description, config, callback) });
 };
 
 /* Functions on the LOGS table (Records from a device) */
