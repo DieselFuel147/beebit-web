@@ -160,16 +160,18 @@ router.get('/bees/:beeId', function(req, res, next) {
 
   database.getDevicesByUser(req.session.username, function(err, devices) {
     database.getDeviceByUUID(beeId, function(err, currentDevice) {
-      if (err) {
-        res.statusCode(404).end();
-        return;
-      }
-
-      res.render('dash/logs', {
-        layout: 'dash/layout',
-        title: 'View Log',
-        devices: devices,
-        currDevice: currentDevice
+      database.getLogsByUUID(beeId, function(err, logs){  
+        if (err) {
+          res.statusCode(404).end();
+          return;
+        }
+        res.render('dash/logs', {
+          layout: 'dash/layout',
+          title: 'View Log',
+          devices: devices,
+          currDevice: currentDevice,
+          logs: logs
+        });
       });
     });
   });

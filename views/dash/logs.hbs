@@ -24,44 +24,35 @@
               <h3 class="box-title">Logs</h3>
 
               <div class="box-tools pull-right">
-                <div class="has-feedback">
-                  <input type="text" class="form-control input-sm" placeholder="Search Logs">
-                  <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                </div>
+                
               </div>
               <!-- /.box-tools -->
             </div>
             <!-- /.box-header -->
             <div class="box-body no-padding">
-              <div class="mailbox-controls">
-                <!-- Check all button -->
-
-                <!-- /.btn-group -->
-                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
-                <div class="pull-right">
-                  1-50/200
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
-                  </div>
-                  <!-- /.btn-group -->
-                </div>
-                <!-- /.pull-right -->
-              </div>
+              
               <div class="table-responsive mailbox-messages">
-                <table class="table table-hover table-striped">
+                <table id="log_table" class="display">
+                  <thead>
+                    <tr>
+                      <th>Alert</th>
+                      <th>People</th>
+                      <th>Time</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
                   <tbody>
-                {{#if devices}}
-                  {{#each devices}}
+                {{#if logs}}
+                  {{#each logs}}
                   <tr>
-                    <td class="mailbox-name"><span class="label label-danger">Danger</span></td>
-                    <td class="mailbox-subject">{{this.description}}</td>
+                    <td class="mailbox-name"><span class="label label-success">Recorded</span></td>
                     <td>{{this.people}}</td>
-                    <td class="mailbox-date">{{this.last_update}}</td>
-                    <td>{{status}}</td>
+                    <td class="mailbox-date">{{this.rtime}}</td>
+                    <td>{{this.dstatus}}</td>
                   </tr>
                   {{/each}}
                 {{/if}}
+     
                     {{!--
                     <tr>
                       <td class="mailbox-name"><span class="label label-danger">Danger</span></td>
@@ -92,30 +83,7 @@
               <!-- /.mail-box-messages -->
             </div>
             <!-- /.box-body -->
-            <div class="box-footer no-padding">
-              <div class="mailbox-controls">
-                <!-- Check all button -->
-                <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
-                </button>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
-                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
-                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-box"></i>Generate Report</button>
-                </div>
-                <!-- /.btn-group -->
-                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
-                <div class="pull-right">
-                  1-50/200
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
-                  </div>
-                  <!-- /.btn-group -->
-                </div>
-                <!-- /.pull-right -->
-              </div>
-            </div>
+            
           </div>
           <!-- /. box -->
         </div>
@@ -124,4 +92,12 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
+<script>
+  $(document).ready( function () {
+    $('#log_table').DataTable();
+} );
+</script>

@@ -119,4 +119,10 @@ Dbhelper.prototype.checkKeyAvailable = function(uuid, callback) {
     db.serialize(() => { db.get(sql, callback) });
 };
 
+Dbhelper.prototype.getLogsByUUID = function(uuid, callback) {
+    const sql = "select  datetime(rtime, 'unixepoch', 'localtime') as rtime, people, dstatus from LOGS where hex(uuid) = '" + uuid + "';";
+    console.log(sql);
+    db.serialize(() => {db.all(sql, callback)});
+}
+
 module.exports = Dbhelper;
