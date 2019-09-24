@@ -59,7 +59,7 @@ function displayDevice(deviceIndex, device) {
 }
 
 function sortDevices(da, db) {
-    return da.people < db.people;
+    return da.people > db.people;
 }
 
 function displayData(devices) {

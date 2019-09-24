@@ -17,8 +17,8 @@ except ImportError:
 update_interval = 0.1
 
 # The UUID would be read from a licence.txt file on the device
-#uuid = 'E4835A3939692228256918FBBD5F3A2C'
-uuid = '7E7316505A9368F124884410CC9367CF'
+uuid = '3573871BA65032C9A7AE104979D55DE9'
+#uuid = 'ED5692A7965AA31CC775D7EF417C5F72'
 
 # The idea is there will be more entry points for things like bee/camerafeed ..etc
 base = 'http://app.beebithive.com/'

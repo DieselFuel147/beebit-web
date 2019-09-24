@@ -23,8 +23,8 @@ git push --force deploy master
 # Perform the installation of the npm project on the server
 ssh apps@$IP -p $PORT <<EOF
   cd $DEPLOY_DIR
-  chown -R apps ./db
   npm install --production
   pm2 stop all
+  chown -R apps ./db
   pm2 start
 EOF
