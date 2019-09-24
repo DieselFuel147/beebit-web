@@ -97,6 +97,7 @@
      */
     // We use an inline data source in the example, usually data would
     // be fetched from a server
+    
     var data = [], totalPoints = 15
 
     var hostname = location.protocol + "//" + location.host;
@@ -148,7 +149,7 @@
       },
       yaxis : {
         min : 0,
-        max: 100,
+        max: 20,
         show: true
       },
       xaxis : {
@@ -174,14 +175,14 @@
     });*/
 
     var donutData = [
-   { label: 'room #2', data: 70, color: '#3c8dbc' },
+   { label: 'Laptop #1', data: 70, color: '#3c8dbc' },
    { label: 'room #3', data: 20, color: '#0073b7' },
-   { label: 'room #1', data: 175, color: '#00c0ef' }
+   { label: 'Raspberry Pi #1', data: 175, color: '#00c0ef' }
  ]
    var weekData = [
   { label: 'room #3', data: 10, color: '#3c8dbc' },
-  { label: 'room #2', data: 20, color: '#0073b7' },
-  { label: 'room #1', data: 30, color: '#00c0ef' }
+  { label: 'Laptop #1', data: 20, color: '#0073b7' },
+  { label: 'Raspberry Pi #1', data: 30, color: '#00c0ef' }
  ]
  $('#pieSelect').on('change', function(event) {
         var opt = this.options[ this.selectedIndex ];
