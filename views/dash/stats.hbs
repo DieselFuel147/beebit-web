@@ -174,14 +174,14 @@
     });*/
 
     var donutData = [
-   { label: 'Side Entance', data: 70, color: '#3c8dbc' },
-   { label: 'Rear Entrance', data: 20, color: '#0073b7' },
-   { label: 'Main Entrance', data: 175, color: '#00c0ef' }
+   { label: 'room #2', data: 70, color: '#3c8dbc' },
+   { label: 'room #3', data: 20, color: '#0073b7' },
+   { label: 'room #1', data: 175, color: '#00c0ef' }
  ]
    var weekData = [
-  { label: 'Side Entance', data: 10, color: '#3c8dbc' },
-  { label: 'Rear Entrance', data: 20, color: '#0073b7' },
-  { label: 'Main Entrance', data: 30, color: '#00c0ef' }
+  { label: 'room #3', data: 10, color: '#3c8dbc' },
+  { label: 'room #2', data: 20, color: '#0073b7' },
+  { label: 'room #1', data: 30, color: '#00c0ef' }
  ]
  $('#pieSelect').on('change', function(event) {
         var opt = this.options[ this.selectedIndex ];
@@ -255,7 +255,7 @@
   * END DONUT CHART
   */
   function labelFormatter(label, series) {
-    return '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">'
+    return '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; font-weight: 600;">'
       + label
       + '<br>'
       + Math.round(series.percent) + '%</div>'
