@@ -23,9 +23,9 @@ Dbhelper.prototype.getUserByUsername = function(username, callback) {
     db.serialize(() => { db.all("SELECT * FROM USERS where username = ?;", username, callback); });
 };
 
-Dbhelper.prototype.addUser = function(username, fname, lname, authority, password, callback) {
-    const sql = "INSERT INTO USERS(username, fname, lname, authority, passwd) VALUES (?, ?, ?, ?, ?);";
-    const values = [username, fname, lname, authority, password];
+Dbhelper.prototype.addUser = function(username, fname, lname, authority, password, email, callback) {
+    const sql = "INSERT INTO USERS(username, fname, lname, authority, passwd, email) VALUES (?, ?, ?, ?, ?, ?);";
+    const values = [username, fname, lname, authority, password, email];
 
     db.serialize(function() {
         db.run(sql, values, callback);

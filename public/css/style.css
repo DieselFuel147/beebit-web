@@ -10,3 +10,8 @@ a {
 footer {
   background-color: white;
 }
+
+.skin-yellow .sidebar-menu > li.header {
+  color: white  !important;
+  background: #222d32 !important;
+}

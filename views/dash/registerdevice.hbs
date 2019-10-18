@@ -1,26 +1,47 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <h1>Device Registration</h1>
+    <small>Link a new beebit-iot device to your account</small>
+    <ol class="breadcrumb">
+      <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      <li><a href="/dashboard/register-a-bee"><i class="fa fa-check"></i> Device Registration</a></li>
+    </ol>
+  </section>
 
-<div class="login-box">
-  <div class="login-logo">
-    <a href="./starter.html"><b>BeeBit</b> Hive</a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="login-box-body">
-    <p class="login-box-msg">Link a bee to your account <br>Enter the unique key found on the label for your device</p>
+  <section class="content container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Form</h3>
+          </div>
+          <div class="box-body">
 
-    <form action="/dashboard/register-a-bee" method="POST">
-      <div class="form-group has-feedback">
-        <input type="username" name="uuid" class="form-control" placeholder="UUID">
-        <span class="fa fa-user form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="username" name="description" class="form-control" placeholder="description">
-        <span class="fa fa-user form-control-feedback"></span>
-      </div>
-      <div class="row">
-        <div class="col-xs-4">
-          <button type="submit" class="btn btn-block btn-warning">Link</button>
+            <form action="/dashboard/register-a-bee" method="POST">
+              <div class="form-group has-feedback">
+                <input type="username" name="uuid" class="form-control" placeholder="UUID">
+                <span class="fa fa-user form-control-feedback"></span>
+              </div>
+              <div class="form-group has-feedback">
+                <input type="username" name="description" class="form-control" placeholder="description">
+                <span class="fa fa-user form-control-feedback"></span>
+              </div>
+
+              <span id="feedback"></span>
+
+              <div class="row">
+                <div class="col-xs-4">
+                  <button type="button" id="submitbtn" class="btn btn-block btn-warning">Submit</button>
+                </div>
+              </div>
+            </form>
+
+          </div> <!-- box-body -->
         </div>
       </div>
-    </form>
-  </div>
+
+    </div>
+  </section>
 </div>
+
+<script type="text/javascript" src="/js/device_register.js"></script>

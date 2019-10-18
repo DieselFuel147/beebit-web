@@ -1,6 +1,6 @@
 <div class="login-box">
     <div class="login-logo">
-      <a href="./starter.html"><b>BeeBit</b> Hive</a>
+      <a href="/"><b>BeeBit</b> Hive</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -15,6 +15,9 @@
           <input type="password" name="password" class="form-control" placeholder="Password">
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
+
+        <span id="feedback"></span>
+
         <div class="row">
           <div class="col-xs-8">
             <div class="checkbox icheck">
@@ -24,11 +27,12 @@
             </div>
           </div>
           <div class="col-xs-4">
-            <button type="submit" class="btn btn-block btn-warning">Sign In</button>
+            <button id="submitbtn" type="button" class="btn btn-block btn-warning">Sign In</button>
           </div>
         </div>
       </form>
 
-      <a href="#">I forgot my password</a><br>
+      <a class="nav-link" href="/dashboard/register">Register a new account</a>
     </div>
   </div>
+<script type="text/javascript" src="/js/User_SignInAccount.js"></script>

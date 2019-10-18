@@ -34,34 +34,51 @@ router.get('/register', function(req, res, next) {
   });
 });
 
+// https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+function validateEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
 /* POST register. */
 router.post('/register', function(req, res, next) {
-  // Todo: min character checks
   let username = req.body["username"];
   let password = req.body["password"];
+  let email = req.body["email"];
   let confirm_password = req.body["cpassword"];
   let firstname = req.body["firstname"];
   let lastname = req.body["lastname"];
 
-  if (password != confirm_password) {
-    res.end("Passwords do not match"); return;
-  }
-  const saltRounds = 10;
+  var errors = "";
 
+  if (email.length == 0) errors += "Email is required\n";
+  else if (!validateEmail(email)) errors += "Email is invalid\n";
+  if (lastname.length == 0 || firstname.length == 0) errors += "first name, last name are required\n";
+  if (password.length == 0 || confirm_password .length == 0) errors += "Password is required\n";
+  else if (password.length < 5) errors += "Password must be at least 5 characters\n";
+  else if (password != confirm_password) errors += "Passwords do not match\n";
+
+  if (errors.length != 0) { 
+    errors = errors.slice(0, -1)
+    res.status(400).end(errors); 
+    return; 
+  }
+
+  const saltRounds = 10;
 
   database.getUserByUsername(username, function (err, rows) {
     if (rows.length == 0) {
       bcrypt.hash(password, saltRounds, function(err, hash) {
-        database.addUser(username, firstname, lastname, 'USER', hash, (err) => {
+        database.addUser(username, firstname, lastname, 'USER', hash, email, (err) => {
           if (err) {
             res.status(500).end("Error creating account");
           } else {
-            res.end("Account Created");
+            res.end("Account Created!");
           }
         });
       });
     } else {
-      res.end("Account by that username exists");
+      res.status(400).end("Account by that username exists");
     }
   });
 });
@@ -75,6 +92,18 @@ router.post('/login', function(req, res, next) {
 
   let username = req.body["username"];
   let password = req.body["password"];
+
+  var errors = "";
+
+  if (username.length == 0) errors += "username field is empty\n";
+  if (password.length == 0) errors += "password field is empty\n";
+
+  if (errors.length != 0) { 
+    errors = errors.slice(0, -1)
+    res.status(400).end(errors); 
+    return; 
+  }
+
   /* Find user */
   database.getUserByUsername(username, function (err, rows) {
     console.log("attempting search for: " + username + " " + password + " in db");
@@ -94,11 +123,10 @@ router.post('/login', function(req, res, next) {
               req.session.fname = row.fname;
               req.session.lname = row.lname;
               req.session.usertype = row.authority;
-              res.redirect("/dashboard");
-              res.end();
+              res.send(200).end("Successful login!");
             }
             else {
-              res.end("Invalid password for user: " + username);
+              res.status(400).end("Invalid password for user: " + username);
             }
             }); 
         });
@@ -124,17 +152,14 @@ router.get('/', function(req, res, next) {
     return;
   }
 
-  database.getUserByUsername(req.session.username, (err, users) => {
-
-    database.getDevicesByUser(req.session.username, (err, devices) => {
-      // Render the view with no devices initially.
-      res.render('dash/index', {
-        layout: 'dash/layout',
-        title: 'BeeBit Dashboard',
-        userinfo: users[0],
-        devices: devices,
-        dashSettings: settings
-      });
+  database.getDevicesByUser(req.session.username, (err, devices) => {
+    // Render the view with no devices initially.
+    res.render('dash/index', {
+      layout: 'dash/layout',
+      title: 'BeeBit Dashboard',
+      devices: devices,
+      dashSettings: settings,
+      userinfo: {fname: req.session.fname, lname: req.session.lname, username: req.session.username}
     });
   });
 });
@@ -146,16 +171,24 @@ router.get('/stats', function(req, res, next) {
     return;
   }
   database.getDevicesByUser(req.session.username, (err, devices) => {
+    // Render the view with no devices initially.
     res.render('dash/stats', {
       layout: 'dash/layout',
       title: 'BeeBit Stats',
-      devices: devices
+      devices: devices,
+      userinfo: {fname: req.session.fname, lname: req.session.lname, username: req.session.username},
+      dashSettings: settings
     });
   });
 });
 
 /* GET view specific bee. */
 router.get('/bees/:beeId', function(req, res, next) {
+  if (!req.session.username) {
+    res.redirect("/dashboard/login");
+    return;
+  }
+
   let beeId = req.params.beeId;
 
   database.getDevicesByUser(req.session.username, function(err, devices) {
@@ -170,7 +203,8 @@ router.get('/bees/:beeId', function(req, res, next) {
           title: 'View Log',
           devices: devices,
           currDevice: currentDevice,
-          logs: logs
+          logs: logs,
+          userinfo: {fname: req.session.fname, lname: req.session.lname, username: req.session.username}
         });
       });
     });
@@ -195,6 +229,7 @@ router.get('/bees/:beeId/configure', function(req, res, next) {
       res.render('dash/configure', {
         layout: 'dash/layout',
         title: 'Configure',
+        userinfo: {fname: req.session.fname, lname: req.session.lname, username: req.session.username},
         uuid: beeId,
         devices: devices,
         currDevice: currentDevice
@@ -243,13 +278,19 @@ router.get('/register-a-bee', function(req, res, next) {
     return;
   }
 
-  res.render('dash/registerdevice', {
-    layout: 'dash/form_layout',
-    title: 'BeeBit Dashboard'
+  database.getDevicesByUser(req.session.username, (err, devices) => {
+    res.render('dash/registerdevice', {
+      layout: 'dash/layout',
+      title: 'BeeBit Dashboard',
+      devices: devices,
+      dashSettings: settings,
+      userinfo: {fname: req.session.fname, lname: req.session.lname, username: req.session.username}
+    });
   });
 });
 
 const default_config = 'frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50'
+
 /* POST register. */
 router.post('/register-a-bee', function(req, res, next) {
   if (!req.session.username) {
@@ -257,28 +298,35 @@ router.post('/register-a-bee', function(req, res, next) {
     return;
   }
   
-  // Todo: min character checks
   let uuid = req.body["uuid"];
   let description = req.body["description"];
+
+  // Regex validate hex and len is 32 chars.
+  if (!(/^[0-9A-F]{32}$/i.test(uuid))) {
+    res.status(400).end('Invalid key format *must be 32 character hexadecimal');
+    return;
+  }
+
+  if (description == '') description = uuid;
 
   database.getDeviceByUUID(uuid, (err, device) => {
     if (err || !device) {
       console.log(err);
       database.checkKeyAvailable(uuid, (err, rows) => {
         if (err || rows.length == 0) {
-          res.status(200).end('Invalid key');
+          res.status(400).end('Invalid key');
         } else {
           config = ('uuid=' + uuid  + '|' + default_config);
           database.addDevice(uuid, req.session.username, description, config, (err) => {
             if (err) res.status(500).end('error adding device')
-            else res.redirect("/dashboard");
+            else res.status(200).end('Device Linked')
           })
         }
       });
     } else {
       msg = 'Key already in use';
       if (device.username == req.session.username) msg = 'The device is already linked to your account';
-      res.status(200).end(msg);
+      res.status(400).end(msg);
     }
   });
 });

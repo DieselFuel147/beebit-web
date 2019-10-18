@@ -17,6 +17,7 @@ CREATE TABLE USERS(
 	lname		VARCHAR(20)     NOT NULL,
     authority	VARCHAR(20)     NOT NULL,
     passwd		VARCHAR(20)     NOT NULL,
+	email		VARCHAR(40)     NOT NULL,
 	CONSTRAINT USERS_PKEY PRIMARY KEY(username),
 	CONSTRAINT USERS_FKEY FOREIGN KEY(authority) REFERENCES AUTHORITIES(authority));
 
@@ -55,11 +56,11 @@ INSERT INTO AUTHORITIES(authority) VALUES
 ("ADMIN"),
 ("USER");
 
-INSERT INTO USERS(username, fname, lname, authority, passwd) VALUES
-("ia000", "ifran", "A", "ADMIN", "$2b$10$SlxYmhOX0YRRi4sMj.gofu9s/JfYfMdUJBn3u3oKlMoa/jQ6bkuVG"),
-("jd002", "john", "D", "USER", "$2b$10$SlxYmhOX0YRRi4sMj.gofu9s/JfYfMdUJBn3u3oKlMoa/jQ6bkuVG"),
-("dj003", "darryl", "J", "USER", "$2b$10$SlxYmhOX0YRRi4sMj.gofu9s/JfYfMdUJBn3u3oKlMoa/jQ6bkuVG"),
-("wizzledonker", "Win", "Holzapfel", "USER", "$2b$10$IQhHY.bTImyVi1YQOovho.LOtueiKiDc1Z.0jp6/xIc3ooGgx67ym");
+INSERT INTO USERS(username, fname, lname, authority, passwd, email) VALUES
+("ia000", "ifran", "A", "ADMIN", "$2b$10$SlxYmhOX0YRRi4sMj.gofu9s/JfYfMdUJBn3u3oKlMoa/jQ6bkuVG", "ifran@beebithive.com"),
+("jd002", "john", "D", "USER", "$2b$10$SlxYmhOX0YRRi4sMj.gofu9s/JfYfMdUJBn3u3oKlMoa/jQ6bkuVG", "john@beebithive.com"),
+("dj003", "darryl", "J", "USER", "$2b$10$SlxYmhOX0YRRi4sMj.gofu9s/JfYfMdUJBn3u3oKlMoa/jQ6bkuVG", "darryl@beebithive.com"),
+("wizzledonker", "Win", "Holzapfel", "USER", "$2b$10$IQhHY.bTImyVi1YQOovho.LOtueiKiDc1Z.0jp6/xIc3ooGgx67ym", "win@beebithive.com");
 
 INSERT INTO KEYS(key) VALUES
 (X'ed5692a7965aa31cc775d7ef417c5f72'),

@@ -21,6 +21,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.18/js/adminlte.min.js"></script> <!-- AdminLTE App -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script> <!-- FastClick -->
         <script src="/js/demo.js"></script> <!-- Modified demo adminLTE script -->   
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
     </head>
     
 
@@ -48,15 +49,17 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-            <li class="dropdown user user-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <span class="hidden-xs">{{userinfo.fname}} {{userinfo.lname}}</span>
-                </a>
-                
-                <ul class="dropdown-menu menu">
-                    <li><a href="/dashboard/logout">Logout</a></li>
-                </ul>
-            </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <strong> {{userinfo.fname}} {{userinfo.lname}}</strong>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/dashboard/UserSetting">Account Settings</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/dashboard/logout">Sign Out</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         </nav>
@@ -69,7 +72,8 @@
 
         <!-- Sidebar user panel (optional) -->
             <div class="image" id='sideImg' style="text-align:center;">
-            <img src="/BeeBitLogoTextless.png" width="150" alt="Logo Image">
+            {{!-- <img src="/BeeBitLogoTextless.png" width="150" alt="Logo Image"> --}}
+            <img style="padding: 1.6em;" src="/images/beebitLogo.svg" width="150" alt="Logo Image">
             </div>
 
         <!-- search form (Optional) -->
@@ -78,7 +82,7 @@
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">Navigation</li>
+            <li class="header text-center"><strong><u>Navigation</u></strong></li>
             <!-- Optionally, you can add icons to the links -->
             <li><a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Hive Dashboard</span></a></li>
             <li><a href="/dashboard/stats"><i class="fa fa-link"></i> <span>Statistics</span></a></li>

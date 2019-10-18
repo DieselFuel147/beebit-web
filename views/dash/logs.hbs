@@ -5,13 +5,14 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        {{currDevice.description}}
+        Device Logs - {{currDevice.description}}
         <small>
           <a href="/dashboard/bees/{{currDevice.uuid}}/configure">configure device</a>
         </small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li><a href="/dashboard/bees/{{currDevice.uuid}}"><i class="fa fa-book"></i> Logs</a></li>
       </ol>
     </section>
 

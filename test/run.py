@@ -17,11 +17,13 @@ except ImportError:
 update_interval = 0.1
 
 # The UUID would be read from a licence.txt file on the device
-uuid = '3573871BA65032C9A7AE104979D55DE9'
+uuid = 'AF233DE1CC579B48964C585A3C7126DF'
+#uuid = '3573871BA65032C9A7AE104979D55DE9'
 #uuid = 'ED5692A7965AA31CC775D7EF417C5F72'
 
 # The idea is there will be more entry points for things like bee/camerafeed ..etc
-base = 'http://app.beebithive.com/'
+base = 'http://localhost:3420/'
+#base = 'http://app.beebithive.com/'
 update_url = base + 'bee/update'
 
 
