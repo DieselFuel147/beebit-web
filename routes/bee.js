@@ -7,6 +7,14 @@ module.exports = function(db) {
   return router;
 };
 
+// Number of seconds before a device is considered 'Disconnected'
+// TODO: Hook to user preferences
+const disconnectTime = 30;
+
+function deviceIsActive(device) {
+  return device.time > (Date.now()/1000 - disconnectTime);
+}
+
 function userHasDevice(username, uuid) {
   return new Promise(function (resolve, reject) {
     database.getDevicesByUser(username, (err, devices) => {
@@ -63,7 +71,7 @@ router.get('/avg/week/:day', function(req, res, next) {
 
   database.getAverageForWeek(week, req.session.username, function getAverage(err, week) {
     if (err) {
-      res.statud(404).end('No records exist for week.');
+      res.status(404).end('No records exist for week.');
     } else {
       res.json(week);
     }
@@ -83,8 +91,10 @@ router.get('/status/total', function(req, res, next) {
       return;
     }
 
-    var totalPeopleCount = devices.reduce(function(valueA, valueB) {
-      return valueA.people + valueB.people;
+    var totalPeopleCount = devices.reduce(function(total, device) {
+      if (!deviceIsActive(device)) return total;
+
+      return total + device.people;
     });
 
     res.json({
@@ -106,9 +116,12 @@ router.get('/status', function (req, res, next) {
     if (err) {
       res.status(404).end('Error fetching results.');
     } else {
-      res.json({
-        devices: devices
+      
+      devices.forEach((device, index, arr) => {
+        arr[index].active = deviceIsActive(device)
       });
+
+      res.json(devices);
     }
   
   });
@@ -176,6 +189,9 @@ router.post('/update', function(req, res, next) {
       res.status(404).end('device uuid not found or not registered to an account.');
     } else {
       database.updateDeviceStatus(req.body.uuid, req.body);
+      // TODO: Respond with status indicating current settings values
+      // and whether to send an image with the next detection
+
       res.status(200).end('status updated');
     }
   });

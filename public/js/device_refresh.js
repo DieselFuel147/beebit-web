@@ -25,6 +25,14 @@ function initialize() {
 }
 
 function displayDevice(deviceIndex, device) {
+
+    // Sometimes the right device isn't sent in order. Manually fix this.
+    for (var i = 0; i < StaticDeviceInfo.totalDevices; i++) {
+        if ($("#description" + i).html() === device.description) {
+            deviceIndex = i;
+        }
+    }
+
     var labelUpdate = document.getElementById("update" + deviceIndex);
 
     var newDate = new Date(device.time * 1000);
@@ -33,29 +41,28 @@ function displayDevice(deviceIndex, device) {
     // If the new date is newer or the time since the last detection is less than the inactive counter
     var timeSinceLast = Math.floor(((new Date()) - newDate) / 1000);
 
-    if (newDate > oldDate || timeSinceLast < settings.inactiveTime) {
+    if (device.active) {
 
-        if (StaticDeviceInfo.initialized) {
-            StaticDeviceInfo.activeDevices++;
-            StaticDeviceInfo.totalDetected += device.people;
-            var labelSuccess = document.getElementById("label" + deviceIndex);
-            labelSuccess.className = "label label-success";
-            labelSuccess.innerHTML = "Detecting";
-        }
+        StaticDeviceInfo.activeDevices++;
+        StaticDeviceInfo.totalDetected += device.people;
 
-        labelUpdate.innerHTML = newDate.toLocaleDateString() + " " + newDate.toLocaleTimeString();
-
-        var status = document.getElementById("status" + deviceIndex);
-        status.innerHTML = device.dstatus;
-            
-        var people = document.getElementById("device" + deviceIndex);
-        people.innerHTML = device.people;
+        var labelSuccess = document.getElementById("label" + deviceIndex);
+        labelSuccess.className = "label label-success";
+        labelSuccess.innerHTML = "Detecting";
             
     } else {
         var fail = document.getElementById("label" + deviceIndex);  // Change to IDLE
         fail.className = "label label-danger";
         fail.innerHTML = "Disconnected";
     }
+
+    labelUpdate.innerHTML = newDate.toLocaleDateString() + " " + newDate.toLocaleTimeString();
+
+    var status = document.getElementById("status" + deviceIndex);
+    status.innerHTML = device.dstatus;
+        
+    var people = document.getElementById("device" + deviceIndex);
+    people.innerHTML = device.people;
 }
 
 function sortDevices(da, db) {
@@ -63,17 +70,20 @@ function sortDevices(da, db) {
 }
 
 function displayData(devices) {
-    StaticDeviceInfo.totalDevices = devices.devices.length;
+    StaticDeviceInfo.totalDevices = $("[id^=mainTable]").length;
     StaticDeviceInfo.activeDevices = 0;
     StaticDeviceInfo.totalDetected = 0;
 
     if (devices == undefined || devices.length == 0) return;
 
-    $.each(devices.devices, displayDevice);
+    $.each(devices, displayDevice);
 
-    devices.devices.sort(sortDevices);
+    devices.sort(sortDevices);
 
-    $("#mostPopular").html(devices.devices[0].description);
+    if (StaticDeviceInfo.totalDevices > 0) {
+        $("#mostPopular").html(devices[0].description);
+    }
+
     $("#devicesCounter").html(`${StaticDeviceInfo.activeDevices}/${StaticDeviceInfo.totalDevices}`);
     $("#totalDetected").html(StaticDeviceInfo.totalDetected);
     StaticDeviceInfo.initialized = true;

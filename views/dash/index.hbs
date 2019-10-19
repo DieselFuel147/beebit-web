@@ -97,7 +97,7 @@
                   {{#each devices}}
                   <tr id="mainTable{{@key}}">
                     <td>{{@key}}</td> 
-                    <td>{{this.description}}</td>
+                    <td id="description{{@key}}">{{this.description}}</td>
                     <td id="device{{@key}}"></td>
                     <td id="update{{@key}}">{{this.last_update}}</td>
                     <td><span class="label label-success" id="label{{@key}}"></span></td>
