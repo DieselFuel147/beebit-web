@@ -7,11 +7,8 @@ module.exports = function(db) {
   return router;
 };
 
-// Number of seconds before a device is considered 'Disconnected'
-// TODO: Hook to user preferences
-const disconnectTime = 30;
-
-function deviceIsActive(device) {
+function deviceIsActive(device, disconnectTime) {
+  console.log("NEW DISTIME: " + disconnectTime);
   return device.time > (Date.now()/1000 - disconnectTime);
 }
 
@@ -92,7 +89,7 @@ router.get('/status/total', function(req, res, next) {
     }
 
     var totalPeopleCount = devices.reduce(function(total, device) {
-      if (!deviceIsActive(device)) return total;
+      if (!deviceIsActive(device, req.session.disconnectTime)) return total;
 
       return total + device.people;
     });
@@ -118,7 +115,7 @@ router.get('/status', function (req, res, next) {
     } else {
       
       devices.forEach((device, index, arr) => {
-        arr[index].active = deviceIsActive(device)
+        arr[index].active = deviceIsActive(device, req.session.disconnectTime)
       });
 
       res.json(devices);

@@ -1,0 +1,92 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <h1>Account Settings</h1>
+    <small>Change details related to your account</small>
+    <ol class="breadcrumb">
+      <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      <li><a href="/dashboard/AccountSettings"><i class="fa fa-cog"></i> Account Settings</a></li>
+    </ol>
+  </section>
+
+  <section class="content container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Settings</h3>
+          </div>
+
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <thead>
+                <th class="col-xs-2">option</th>
+                <th>value</th>
+              </thead>
+              <tbody id="configForm">
+
+                <tr>
+                  <td>Username:</td>
+                  <td><input disabled type="text" name="username" class="form-control" placeholder="username" value="{{userinfo.username}}"></td>
+                </tr>
+
+                <tr>
+                  <td>Email:</td>
+                  <td><input type="text" name="email" class="form-control" placeholder="username" value="{{userinfo.email}}"></td>
+                </tr>
+
+                <tr>
+                  <td>First name:</td>
+                  <td><input type="text" name="fname" class="form-control" placeholder="fname" value="{{userinfo.fname}}"></td>
+                </tr>
+
+                <tr>
+                  <td>Last name:</td>
+                  <td><input type="text" name="lname" class="form-control" placeholder="lname" value="{{userinfo.lname}}"></td>
+                </tr>
+                
+                <tr>
+                  <td>Disconnect Time:
+                    <span class="fa fa-question-circle" data-toggle="tooltip" aria-hidden="true"
+                      title="Time until a device is considered disconnected">
+                    </span>
+                  </td>
+                  <td><input type="text" name="disconnectTime" class="form-control" placeholder="disconnectTime" value="{{userinfo.disconnectTime}}"></td>
+                </tr>
+
+                <tr>
+                  <td>Update Password:</td>
+                  <td><input name="update_passwd" id="checkbox_editpasswd" type="checkbox" value=""></td>
+                </tr>
+                
+                <tr>
+                  <td>Password:</td>
+                  <td><input disabled type="text" name="password" class="form-control" placeholder="password"></td>
+                </tr>
+
+                <tr>
+                  <td>Confirm Password:</td>
+                  <td><input disabled type="text" name="password_confirm" class="form-control" placeholder="confirm password"></td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+          <div class="box-body">
+            
+            <span id="feedback"></span>
+            <div class="row">
+              <div class="col-xs-4">
+                <button type="button" id="submitbtn" class="btn btn-block btn-warning">Submit</button>
+              </div>
+            </div>
+
+          </div> <!-- box-body -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<script type="text/javascript" src="/js/account_settings.js"></script>

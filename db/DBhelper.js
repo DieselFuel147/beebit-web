@@ -23,9 +23,9 @@ Dbhelper.prototype.getUserByUsername = function(username, callback) {
     db.serialize(() => { db.all("SELECT * FROM USERS where username = ?;", username, callback); });
 };
 
-Dbhelper.prototype.addUser = function(username, fname, lname, authority, password, email, callback) {
-    const sql = "INSERT INTO USERS(username, fname, lname, authority, passwd, email) VALUES (?, ?, ?, ?, ?, ?);";
-    const values = [username, fname, lname, authority, password, email];
+Dbhelper.prototype.addUser = function(username, fname, lname, authority, password, email, disconnectTime, callback) {
+    const sql = "INSERT INTO USERS(username, fname, lname, authority, passwd, email, disconnectTime) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    const values = [username, fname, lname, authority, password, email, disconnectTime];
 
     db.serialize(function() {
         db.run(sql, values, callback);
@@ -36,6 +36,24 @@ Dbhelper.prototype.deleteUser = function(username, callback) {
     /* remove all associated devices for this user */
     this.deleteDeviceByUSER (username, () => {
         db.serialize(() => { db.run("DELETE FROM USER WHERE username = ?;", username, callback) });
+    });
+};
+
+Dbhelper.prototype.updateUserdetails = function(username, fname, lname, email, disconnectTime, callback) {
+    const sql = "UPDATE USERS SET fname = ?, lname = ?, email = ?, disconnectTime = ? WHERE username = ?;";
+    const values = [fname, lname, email, disconnectTime, username];
+
+    db.serialize(function() {
+        db.run(sql, values, callback);
+    });
+};
+
+Dbhelper.prototype.updateUserpasswd = function(username, passwd, callback) {
+    const sql = "UPDATE USERS SET passwd = ? WHERE username = ?;";
+    const values = [passwd, username];
+
+    db.serialize(function() {
+        db.run(sql, values, callback);
     });
 };
 

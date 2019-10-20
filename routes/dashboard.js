@@ -7,6 +7,9 @@ const settings = {
   update_timer : 1.0
 }
 
+// Number of seconds before a device is considered 'Disconnected'
+const disconnectTime_default = 30;
+
 let database
 module.exports = function(db) {
   database = db;
@@ -40,6 +43,7 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
+const saltRounds = 10;
 /* POST register. */
 router.post('/register', function(req, res, next) {
   let username = req.body["username"];
@@ -64,12 +68,10 @@ router.post('/register', function(req, res, next) {
     return; 
   }
 
-  const saltRounds = 10;
-
   database.getUserByUsername(username, function (err, rows) {
     if (rows.length == 0) {
       bcrypt.hash(password, saltRounds, function(err, hash) {
-        database.addUser(username, firstname, lastname, 'USER', hash, email, (err) => {
+        database.addUser(username, firstname, lastname, 'USER', hash, email, disconnectTime_default, (err) => {
           if (err) {
             res.status(500).end("Error creating account");
           } else {
@@ -119,10 +121,12 @@ router.post('/login', function(req, res, next) {
             if (result === true)
             {
               console.log("Successful login: " + username);
+              req.session.disconnectTime = row.disconnectTime;
               req.session.username = row.username;
               req.session.fname = row.fname;
               req.session.lname = row.lname;
               req.session.usertype = row.authority;
+              req.session.email = row.email;
               res.send(200).end("Successful login!");
             }
             else {
@@ -135,6 +139,104 @@ router.post('/login', function(req, res, next) {
         
   });
   
+});
+
+/* GET Account Settings */
+router.get('/AccountSettings', function(req, res, next) {
+  if (!req.session.username) {
+    res.redirect("/dashboard/login");
+    return;
+  }
+  database.getDevicesByUser(req.session.username, (err, devices) => {
+    res.render('dash/accountSettings', {
+      layout: 'dash/layout',
+      title: 'Account Settings',
+      userinfo: {
+        fname: req.session.fname, 
+        lname: req.session.lname, 
+        username: req.session.username,
+        email: req.session.email,
+        disconnectTime: req.session.disconnectTime
+      },
+      devices: devices,
+      dashSettings: settings
+    });
+  });
+});
+
+/* POST Account Settings */
+router.post('/AccountSettings', function(req, res, next) {
+  if (!req.session.username) {
+    res.redirect("/dashboard/login");
+    return;
+  }
+
+  let passwd_need_update = (req.body["update_passwd"] == 'true');
+ 
+  let firstname = req.body["fname"];
+  let lastname = req.body["lname"];
+  let email = req.body["email"];
+  let password = req.body["password"];
+  let confirm_password = req.body["password_confirm"];
+  let disconnectTime = parseInt(req.body["disconnectTime"]);
+
+  var errors = "";
+
+  // input validation
+  if (email.length == 0) errors += "Email is required\n";
+  else if (!validateEmail(email)) errors += "Email is invalid\n";
+  if (lastname.length == 0 || firstname.length == 0) errors += "first name, last name are required\n";
+  if (isNaN(disconnectTime)) errors += "Password is required\n";
+  else if (disconnectTime < 0) errors += 'DisconnectTime must be positive\n'
+
+  if (passwd_need_update) {
+    if (password.length == 0 || confirm_password .length == 0) errors += "Password is required\n";
+    else if (password.length < 5) errors += "Password must be at least 5 characters\n";
+    else if (password != confirm_password) errors += "Passwords do not match\n";
+  }
+  
+  // return errors if any
+  if (errors.length != 0) { 
+    errors = errors.slice(0, -1);
+    res.status(400).end(errors); 
+    return; 
+  }
+
+  // save changes
+  if (passwd_need_update) {
+    // encrypt new password
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+      // update new password
+      database.updateUserpasswd(req.session.username, hash, (err) => {
+        if (err) {res.status(500).end("Failed to update password");}
+        else {
+          // update other user details
+          database.updateUserdetails(req.session.username, firstname, lastname, email, disconnectTime, (err) => {
+            if (err) {res.status(500).end("Failed to update new details");}
+            else {
+              res.status(200).end("New details saved");
+              req.session.disconnectTime = disconnectTime;
+              req.session.fname = firstname;
+              req.session.lname = lastname;
+              req.session.email = email;
+            }
+          });
+        }
+      })
+    });
+  }
+  else {
+    // update other user details
+    database.updateUserdetails(req.session.username, firstname, lastname, email, disconnectTime, (err) => {
+      if (err) {res.status(500).end("Failed to update new details");}
+      else {
+        req.session.disconnectTime = disconnectTime;
+        req.session.fname = firstname;
+        req.session.lname = lastname;
+        req.session.email = email;
+        res.status(200).end("New details saved");}
+    });
+  }
 });
 
 /* GET logout. */
@@ -271,7 +373,7 @@ router.post('/bees/:beeId/configure', function(req, res, next) {
 });
 
 
-/* GET register. */
+/* GET device register page. */
 router.get('/register-a-bee', function(req, res, next) {
   if (!req.session.username) {
     res.redirect("/dashboard/login");
@@ -291,7 +393,7 @@ router.get('/register-a-bee', function(req, res, next) {
 
 const default_config = 'frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50'
 
-/* POST register. */
+/* POST device register page. */
 router.post('/register-a-bee', function(req, res, next) {
   if (!req.session.username) {
     res.redirect("/dashboard/login");
