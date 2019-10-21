@@ -50,7 +50,7 @@ function draw_form(config) {
         } else {
             outHtml += `<td>`
             if (boolean_types.includes(k)) outHtml += `<input type="checkbox" name="${k}" ${((v == 1 ? 'checked' : ''))}>`
-            else if (integer_types.includes(k)) outHtml += `<input type="number" name="${k}" value="${v}">`
+            else if (integer_types.includes(k)) outHtml += `<input type="number" name="${k}" value="${v}" step="any">`
             else outHtml += `<input type="text" name="${k}" value="${v}">`
             outHtml += `</td>`
         }
