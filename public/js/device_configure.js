@@ -36,7 +36,7 @@ function draw_form(config) {
     var outHtml = ""; 
 
     var read_only_types = ["uuid", "model", "config"];
-    var boolean_types = ["raspi", "useOpenCL", "useCSRT"]
+    var boolean_types = ["raspi", "useOpenCL", "useCSRT", "useTracking"]
     var integer_types = ["frequency", "confidence", "skipFrames",
                         "imageWidth", "imageHeight", "neuralNetQuality",
                         "maxDisappeared", "searchDistance"]
