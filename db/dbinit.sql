@@ -33,6 +33,7 @@ CREATE TABLE DEVICES(
 	reg_date	VARCHAR(20)		NOT NULL, /* date device was linked */
 	last_update	VARCHAR(20)		NOT NULL, /* unix timestamp */
 	config		VARCHAR(300)	NULL, /* configuration */
+	c_recieved	INTEGER			NOT NULL, /* Whether the device has recieved the current config value */
 	CONSTRAINT DEVICES_FKEY FOREIGN KEY(username) REFERENCES USERS(username),
 	CONSTRAINT DEVICES_FKEY2 FOREIGN KEY(uuid) REFERENCES KEYS(key),
     CONSTRAINT DEVICES_PKEY PRIMARY KEY(uuid, username),
@@ -67,17 +68,19 @@ INSERT INTO KEYS(key) VALUES
 (X'3573871ba65032c9a7ae104979d55de9'),
 (X'a7050cd5aa819b5a3396ad26a7230bda');
 
-INSERT INTO DEVICES(username, uuid, description, reg_date, last_update, config) VALUES
-("wizzledonker", X'ed5692a7965aa31cc775d7ef417c5f72', "Laptop #1", '2019-01-18', '1565417874', 'uuid=ed5692a7965aa31cc775d7ef417c5f72|frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50'),
-("wizzledonker", X'3573871ba65032c9a7ae104979d55de9', "Raspberry Pi #1", '2019-02-14', '1565418166', 'uuid=3573871ba65032c9a7ae104979d55de9|frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50'),
-("dj003", X'a7050cd5aa819b5a3396ad26a7230bda', "Extra Device", '2019-03-12', '1565414166', 'uuid=a7050cd5aa819b5a3396ad26a7230bda|frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50');
+INSERT INTO DEVICES(username, uuid, description, reg_date, last_update, config, c_recieved) VALUES
+("wizzledonker", X'ed5692a7965aa31cc775d7ef417c5f72', "Laptop #1", '2019-01-18', '1565417874', 'uuid=ed5692a7965aa31cc775d7ef417c5f72|frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50', 1),
+("wizzledonker", X'3573871ba65032c9a7ae104979d55de9', "Raspberry Pi #1", '2019-02-14', '1565418166', 'uuid=3573871ba65032c9a7ae104979d55de9|frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50', 1),
+("dj003", X'a7050cd5aa819b5a3396ad26a7230bda', "Extra Device", '2019-03-12', '1565414166', 'uuid=a7050cd5aa819b5a3396ad26a7230bda|frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50', 1);
 
 INSERT INTO LOGS(uuid, rtime, people, dstatus) VALUES
 (X'ed5692a7965aa31cc775d7ef417c5f72', 1569292052, 5, "detecting"),
 (X'ed5692a7965aa31cc775d7ef417c5f72', 1569285200, 5, "detecting"),
 (X'ed5692a7965aa31cc775d7ef417c5f72', 1569292052, 2, "detecting"),
 (X'ed5692a7965aa31cc775d7ef417c5f72', 1569285200, 2, "detecting"),
-(X'3573871ba65032c9a7ae104979d55de9', 1568532995, 10, "idle");
+(X'3573871ba65032c9a7ae104979d55de9', 1568532995, 10, "idle"),
+(X'3573871ba65032c9a7ae104979d55de9', 1568533995, 10, "idle"),
+(X'3573871ba65032c9a7ae104979d55de9', 1568534995, 10, "idle");
 
 /* extra keys */
 INSERT INTO KEYS (key) VALUES

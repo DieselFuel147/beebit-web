@@ -189,10 +189,18 @@ router.post('/update', function(req, res, next) {
       res.status(404).end('device uuid not found or not registered to an account.');
     } else {
       database.updateDeviceStatus(req.body.uuid, req.body);
-      // TODO: Respond with status indicating current settings values
-      // and whether to send an image with the next detection
 
-      res.status(200).end('status updated');
+      database.getDeviceConfigByUUID(req.body.uuid, function(err, result) {
+        if (err || result.c_recieved || result.config.length == 0 ) {
+          res.status(200).end('updateConfig=0');
+          return;
+        }
+        
+        // TODO: Only set config recieved if the device responds with an acknowledgement
+        database.setDeviceConfigRecievedByUUID(req.body.uuid, () => {
+          res.status(200).end('updateConfig=1|' + result.config);
+        });
+      });
     }
   });
 
