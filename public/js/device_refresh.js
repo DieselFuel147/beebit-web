@@ -131,8 +131,8 @@ function displayRanks(devices) {
     devices.sort(sortAverages);
 
     var totalPeople = devices.reduce(function (total, curr) {
-        return total.average + curr.average;
-    });
+        return total + curr.average;
+    }, 0);
 
     console.log(totalPeople);
     var counter = 1;
@@ -168,6 +168,8 @@ function fillRankTable() {
     var request = statsLoc + today + "/" + time;
     console.log(request);
     $.getJSON(request, displayRanks).fail(function(err) {
+        // Clear the table as no datapoints are available.
+        $("#rankTable").html("<tr><td>No data available.</td></tr>");
         console.log(err);
     });
 }
