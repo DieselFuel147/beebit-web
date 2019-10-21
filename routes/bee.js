@@ -8,7 +8,6 @@ module.exports = function(db) {
 };
 
 function deviceIsActive(device, disconnectTime) {
-  console.log("NEW DISTIME: " + disconnectTime);
   return device.time > (Date.now()/1000 - disconnectTime);
 }
 
@@ -181,23 +180,36 @@ router.post('/update', function(req, res, next) {
     return;
   }
 
+  function sendConfigUpdate(config) {
+    database.setDeviceConfigRecievedByUUID(req.body.uuid, () => {
+      res.status(200).end('updateConfig=1|' + config);
+    });
+  }
+
   database.getDeviceByUUID(req.body.uuid, (err, device) => {
     if (err || !device) {
       res.status(404).end('device uuid not found or not registered to an account.');
     } else {
-      database.updateDeviceStatus(req.body.uuid, req.body);
-
+      // First get the config for the device and check when the device was last online
       database.getDeviceConfigByUUID(req.body.uuid, function(err, result) {
         if (err || result.c_recieved || result.config.length == 0 ) {
-          res.status(200).end('updateConfig=0');
-          return;
+          // If it has been longer than our specified timeout, send the new settings
+          database.getDeviceStatusByUUID(req.body.uuid, function(err, device) {
+            if (!err && deviceIsActive(device, 30)) {
+              // Device is active, don't send current settings
+              res.status(200).end('updateConfig=0');
+            } else {
+              // Device just came online, update the config
+              sendConfigUpdate(result.config);
+            }
+          });
+        } else {
+          sendConfigUpdate(result.config);
         }
-        
-        // TODO: Only set config recieved if the device responds with an acknowledgement
-        database.setDeviceConfigRecievedByUUID(req.body.uuid, () => {
-          res.status(200).end('updateConfig=1|' + result.config);
-        });
       });
+
+      // Then update the device status in the database
+      database.updateDeviceStatus(req.body.uuid, req.body);
     }
   });
 

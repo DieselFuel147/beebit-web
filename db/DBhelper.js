@@ -66,6 +66,10 @@ Dbhelper.prototype.getDeviceStatusesByUser = function(username, callback) {
     db.serialize(() => { db.all("SELECT username, hex(uuid) as uuid, description, reg_date, time, people, dstatus FROM DEVICE_STATUS WHERE username = ?;", username, callback) });
 };
 
+Dbhelper.prototype.getDeviceStatusByUUID = function(uuid, callback) {
+    db.serialize(() => { db.get("SELECT description, reg_date, time, people, dstatus FROM DEVICE_STATUS WHERE uuid = X'" + uuid + "';", callback) });
+};
+
 Dbhelper.prototype.getAllDevices = function(callback) {
     db.serialize(() => { db.all("SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update FROM DEVICES", callback) });
 };
