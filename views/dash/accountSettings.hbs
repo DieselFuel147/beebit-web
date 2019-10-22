@@ -10,7 +10,7 @@
 
   <section class="content container-fluid">
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-6">
         <div class="box">
           <div class="box-header">
             <h3 class="box-title">Settings</h3>
@@ -18,30 +18,26 @@
 
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
-              <thead>
-                <th class="col-xs-2">option</th>
-                <th>value</th>
-              </thead>
               <tbody id="configForm">
 
                 <tr>
                   <td>Username:</td>
-                  <td><input disabled type="text" name="username" class="form-control" placeholder="username" value="{{userinfo.username}}"></td>
+                  <td><input disabled type="text" name="username" class="form-control" placeholder="Username" value="{{userinfo.username}}"></td>
                 </tr>
 
                 <tr>
                   <td>Email:</td>
-                  <td><input type="text" name="email" class="form-control" placeholder="username" value="{{userinfo.email}}"></td>
+                  <td><input type="text" name="email" class="form-control" placeholder="Email" value="{{userinfo.email}}"></td>
                 </tr>
 
                 <tr>
                   <td>First name:</td>
-                  <td><input type="text" name="fname" class="form-control" placeholder="fname" value="{{userinfo.fname}}"></td>
+                  <td><input type="text" name="fname" class="form-control" placeholder="First name" value="{{userinfo.fname}}"></td>
                 </tr>
 
                 <tr>
                   <td>Last name:</td>
-                  <td><input type="text" name="lname" class="form-control" placeholder="lname" value="{{userinfo.lname}}"></td>
+                  <td><input type="text" name="lname" class="form-control" placeholder="Last name" value="{{userinfo.lname}}"></td>
                 </tr>
                 
                 <tr>
@@ -50,7 +46,7 @@
                       title="Time until a device is considered disconnected">
                     </span>
                   </td>
-                  <td><input type="text" name="disconnectTime" class="form-control" placeholder="disconnectTime" value="{{userinfo.disconnectTime}}"></td>
+                  <td><input type="text" name="disconnectTime" class="form-control" placeholder="Disconnect time" value="{{userinfo.disconnectTime}}"></td>
                 </tr>
 
                 <tr>
@@ -60,12 +56,12 @@
                 
                 <tr>
                   <td>Password:</td>
-                  <td><input disabled type="text" name="password" class="form-control" placeholder="password"></td>
+                  <td><input disabled type="text" name="password" class="form-control" placeholder="Password"></td>
                 </tr>
 
                 <tr>
                   <td>Confirm Password:</td>
-                  <td><input disabled type="text" name="password_confirm" class="form-control" placeholder="confirm password"></td>
+                  <td><input disabled type="text" name="password_confirm" class="form-control" placeholder="Confirm password"></td>
                 </tr>
 
               </tbody>
@@ -76,7 +72,7 @@
             
             <span id="feedback"></span>
             <div class="row">
-              <div class="col-xs-4">
+              <div class="col-xs-4" style="display: block; margin-left:33%;">
                 <button type="button" id="submitbtn" class="btn btn-block btn-warning">Submit</button>
               </div>
             </div>
