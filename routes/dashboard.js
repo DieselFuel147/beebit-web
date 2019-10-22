@@ -295,6 +295,34 @@ router.get('/bees/:beeId', function(req, res, next) {
 
   database.getDevicesByUser(req.session.username, function(err, devices) {
     database.getDeviceByUUID(beeId, function(err, currentDevice) {
+      if (err) {
+        res.statusCode(404).end();
+        return;
+      }
+
+      res.render('dash/bee', {
+        layout: 'dash/layout',
+        title: 'Page',
+        userinfo: {fname: req.session.fname, lname: req.session.lname, username: req.session.username},
+        uuid: beeId,
+        devices: devices,
+        currDevice: currentDevice
+      });
+    });
+  });
+});
+
+/* GET view logs for specific bee. */
+router.get('/bees/:beeId/logs', function(req, res, next) {
+  if (!req.session.username) {
+    res.redirect("/dashboard/login");
+    return;
+  }
+
+  let beeId = req.params.beeId;
+
+  database.getDevicesByUser(req.session.username, function(err, devices) {
+    database.getDeviceByUUID(beeId, function(err, currentDevice) {
       database.getLogsByUUID(beeId, function(err, logs){  
         if (err) {
           res.statusCode(404).end();
@@ -308,6 +336,34 @@ router.get('/bees/:beeId', function(req, res, next) {
           logs: logs,
           userinfo: {fname: req.session.fname, lname: req.session.lname, username: req.session.username}
         });
+      });
+    });
+  });
+});
+
+/* GET specific bee's boxes page. */
+router.get('/bees/:beeId/boxes', function(req, res, next) {
+  if (!req.session.username) {
+    res.redirect("/dashboard/login");
+    return;
+  }
+
+  let beeId = req.params.beeId;
+
+  database.getDevicesByUser(req.session.username, function(err, devices) {
+    database.getDeviceByUUID(beeId, function(err, currentDevice) {
+      if (err) {
+        res.statusCode(404).end();
+        return;
+      }
+
+      res.render('dash/boxes', {
+        layout: 'dash/layout',
+        title: 'Page',
+        userinfo: {fname: req.session.fname, lname: req.session.lname, username: req.session.username},
+        uuid: beeId,
+        devices: devices,
+        currDevice: currentDevice
       });
     });
   });
