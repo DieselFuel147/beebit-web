@@ -7,7 +7,8 @@ function setFormFeedback(msg, severity) {
     err.innerHTML = err.innerHTML + '<div id="feedback" class="alert alert-' + severity + '"><strong>' + msg + '</strong></div>';
 }
 
-function submit_form() {
+function submit_form(e) {
+    e.preventDefault();
     var data = {};
 
     $('input').each(function(i) {  
