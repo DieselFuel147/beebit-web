@@ -57,7 +57,7 @@ router.post('/register', function(req, res, next) {
 
   if (email.length == 0) errors += "Email is required\n";
   else if (!validateEmail(email)) errors += "Email is invalid\n";
-  if (lastname.length == 0 || firstname.length == 0) errors += "first name, last name are required\n";
+  if (lastname.length == 0 || firstname.length == 0) errors += "First name and last name are required\n";
   if (password.length == 0 || confirm_password .length == 0) errors += "Password is required\n";
   else if (password.length < 5) errors += "Password must be at least 5 characters\n";
   else if (password != confirm_password) errors += "Passwords do not match\n";
