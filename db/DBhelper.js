@@ -141,6 +141,11 @@ Dbhelper.prototype.updateDeviceStatus = function(uuid, data, callback) {
     db.serialize(() => { db.run(sql, callback) });
 };
 
+Dbhelper.prototype.createNewKey = function(newKey, callback) {
+    const sql = "INSERT INTO KEYS (key) VALUES (X'" + newKey + "')";
+    db.serialize(() => { db.run(sql, callback) });
+};
+
 Dbhelper.prototype.checkKeyAvailable = function(uuid, callback) {
     const sql = "select * from (select key from KEYS where KEYS.key not in (select uuid from DEVICES)) where key = X'" + uuid + "';"
     db.serialize(() => { db.get(sql, callback) });

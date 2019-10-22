@@ -7,6 +7,9 @@ module.exports = function(db) {
   return router;
 };
 
+// The token that manufacturers of the device must have to authenticate
+const MANUFACTURER_BEARER = "2%qH3n$d2z^SS-aV";
+
 function deviceIsActive(device, disconnectTime) {
   return device.time > (Date.now()/1000 - disconnectTime);
 }
@@ -36,6 +39,33 @@ function getUserDeviceStats(username, enddate, days) {
     });
   });
 }
+
+// Sends a manufacturer request, adding a uuid to the database.
+router.post('/manufacture', function(req, res, next) {
+  if (!req.headers.authorization) {
+    res.sendStatus(403);
+    return;
+  }
+
+  var token = req.headers.authorization.trim().split(' ');
+
+  if (token[0] !== "Bearer" || token[1] !== MANUFACTURER_BEARER) {
+    console.log(token[1]);
+    res.sendStatus(403);
+    return;
+  }
+
+  // Generate a random UUID 32 characters long
+  var uuidGenerated = "";
+  for (var i = 0; i < 32; i++) {
+    uuidGenerated += Math.floor(Math.random() * 16).toString(16);
+  }
+
+  database.createNewKey(uuidGenerated);
+
+  res.status(200).end(uuidGenerated);
+
+});
 
 // Gets the average of all logs for a specific day
 router.get('/avg/day/:day', function(req, res, next) {
