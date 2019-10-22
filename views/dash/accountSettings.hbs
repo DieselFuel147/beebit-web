@@ -1,3 +1,4 @@
+<body onload="changeClass()">
 <div class="content-wrapper">
   <section class="content-header">
     <h1>Account Settings</h1>
@@ -17,7 +18,7 @@
           </div>
 
           <div class="box-body table-responsive no-padding">
-            <table class="table table-hover" style="overflow-x:auto;">
+            <table class="table table-hover" style="overflow-x:auto;table-layout:auto;">
               <tbody id="configForm">
 
                 <tr>
@@ -84,5 +85,19 @@
     </div>
   </section>
 </div>
+</body>
+<script>
+  function changeClass(){
+    var x = document.getElementsByClassName('col-xs-8');
+    var width = (window.innerWidth > 0) ? window.innerWidth : screen.Width;
+    console.log(width);
+    if(width <= 640) {
+        for(var i = 0; i < x.length; i++) {
+            x[i].className ='col-xs-12'; 
+        }
+    } 
+  }
+</script>
+
 
 <script type="text/javascript" src="/js/account_settings.js"></script>
