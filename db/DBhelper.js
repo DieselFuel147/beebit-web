@@ -135,9 +135,13 @@ Dbhelper.prototype.getAverageForWeek = function(weekEnd, username, callback) {
 Dbhelper.prototype.updateDeviceStatus = function(uuid, data, callback) {
     status =  "unknown";
     people_detected = 0;
+    timestamp = (new Date()) / 1000;
+
     if (data.status) status = data.status;
     if (data.people) people_detected = data.people;
-    const sql = "INSERT INTO LOGS(uuid,rtime,people,dstatus) VALUES (X'" + uuid + "', strftime('%s', 'now'),'"+people_detected+"','"+status+"');";
+    if (data.timestamp) timestamp = data.timestamp;
+
+    const sql = "INSERT INTO LOGS(uuid,rtime,people,dstatus) VALUES (X'" + uuid + "', " + timestamp + ",'"+people_detected+"','"+status+"');";
     db.serialize(() => { db.run(sql, callback) });
 };
 

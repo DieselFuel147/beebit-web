@@ -32,7 +32,7 @@ def update(status):
     c.setopt(c.URL, update_url)
     c.setopt(c.WRITEFUNCTION, buffer.write)
 
-    post_data = {'uuid': uuid, 'status': status, 'people': random.randint(0, 50)}
+    post_data = {'uuid': uuid, 'status': status, 'people': random.randint(0, 50), 'timestamp': int(time.time())}
     c.setopt(c.POSTFIELDS, urlencode(post_data))
 
     c.perform()
