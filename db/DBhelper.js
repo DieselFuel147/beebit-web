@@ -142,7 +142,19 @@ Dbhelper.prototype.updateDeviceStatus = function(uuid, data, callback) {
     if (data.timestamp) timestamp = data.timestamp;
 
     const sql = "INSERT INTO LOGS(uuid,rtime,people,dstatus) VALUES (X'" + uuid + "', " + timestamp + ",'"+people_detected+"','"+status+"');";
-    db.serialize(() => { db.run(sql, callback) });
+    const detectSql = "INSERT INTO DETECTIONS(uuid, trackId, rtime, x_pos, y_pos) VALUES (X'" + uuid + "', ?, ?, ?, ?);";
+    
+    db.serialize(() => { 
+        db.run(sql, callback);
+
+        // Insert all specific detections into the database
+        if (data.trackers && data.trackers.length > 0) {
+            data.trackers.forEach((tracker, index) => {
+                db.run(detectSql, tracker.id, timestamp, tracker.x, tracker.y);
+            });
+        }
+
+    });
 };
 
 Dbhelper.prototype.createNewKey = function(newKey, callback) {
