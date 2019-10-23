@@ -126,7 +126,12 @@ function sortAverages(da, db) {
 }
 
 function displayRanks(devices) {
-    var outHtml = ""; 
+    var outHtml = "";
+
+    if (devices.length == 0) {
+        $("#rankTable").html("<tr><td colspan='6'>No data available.</td></tr>");
+        return;
+    }
 
     devices.sort(sortAverages);
 
@@ -169,7 +174,7 @@ function fillRankTable() {
     console.log(request);
     $.getJSON(request, displayRanks).fail(function(err) {
         // Clear the table as no datapoints are available.
-        $("#rankTable").html("<tr><td>No data available.</td></tr>");
+        $("#rankTable").html("<tr><td colspan='6'>No data available.</td></tr>");
         console.log(err);
     });
 }
