@@ -57,6 +57,12 @@ $(document).ready(function() {
     // Register event handlers
     canvas.addEventListener('mousedown', onMouseDown);
 
+    $("#boxName").on("change paste keyup", onValueChanged);
+    $("#boxX").on("change paste keyup", onValueChanged);
+    $("#boxY").on("change paste keyup", onValueChanged);
+    $("#boxW").on("change paste keyup", onValueChanged);
+    $("#boxH").on("change paste keyup", onValueChanged);
+
     // Fetch the boxes from the server and draw them
     //drawBoxes();
 
@@ -73,14 +79,26 @@ $(document).ready(function() {
 });
 
 function onSelectionChanged(box) {
-    console.log(box);
-
     // When the selected box changes
     $("#boxName").val(box.name);
     $("#boxX").val(box.x);
     $("#boxY").val(box.y);
     $("#boxW").val(box.width);
     $("#boxH").val(box.height);
+}
+
+function onValueChanged() {
+
+    if (selectedBoxIndex == -1) return;
+
+    // Called when any of the box input fields change their value
+    boxes[selectedBoxIndex].name = $("#boxName").val();
+    boxes[selectedBoxIndex].x = parseFloat($("#boxX").val());
+    boxes[selectedBoxIndex].y = parseFloat($("#boxY").val());
+    boxes[selectedBoxIndex].width = parseFloat($("#boxW").val());
+    boxes[selectedBoxIndex].height = parseFloat($("#boxH").val());
+
+    redraw();
 }
 
 function redraw() {
@@ -111,7 +129,6 @@ function onMouseDown(event) {
     const normX = (event.clientX - rect.left) / canvas_w;
     const normY = (event.clientY - rect.top) / canvas_h;
 
-    var foundBox = -1;
     foundBox = boxes.findIndex(function (box) {
         return box.x < normX 
             && box.y < normY 
