@@ -44,6 +44,8 @@ function checkDeviceImage() {
 
 $(document).ready(function() {
     $("#updateNotify").hide();
+    $("#updateFailedNotify").hide();
+
     beeId = $("#beeID")[0].innerHTML;
 
     canvas = $("#boxDraw")[0];
@@ -95,13 +97,15 @@ function saveBoxes() {
         type: 'POST',
         data: JSON.stringify(boxes),
         contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        async: true,
-        success: function(msg) {
-            // Success handler. Send confirmation onto the page.
-            $("#updateNotify").show();
-            setTimeout(() => { $("#updateNotify").fadeOut() }, 2000);
-        }
+        dataType: 'text',
+        async: true
+    }).done(function() {
+        // Success handler. Send confirmation onto the page.
+        $("#updateNotify").show();
+        setTimeout(() => { $("#updateNotify").fadeOut() }, 2000);
+    }).fail(function() {
+        $("#updateFailedNotify").show();
+        setTimeout(() => { $("#updateFailedNotify").fadeOut() }, 2000);
     });
 }
 

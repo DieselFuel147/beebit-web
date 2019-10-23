@@ -220,6 +220,7 @@ router.post('/boxes/set/:deviceId', async function(req, res, next) {
   }
 
   database.setBoxesByUUID(deviceId, boxes);
+  res.sendStatus(200).end();
 });
 
 // Returns statistics for a single device
