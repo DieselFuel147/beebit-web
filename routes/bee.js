@@ -18,7 +18,7 @@ function userHasDevice(username, uuid) {
   return new Promise(function (resolve, reject) {
     database.getDevicesByUser(username, (err, devices) => {
       if (devices.some(function(device) {
-        device.uuid === uuid;
+        return device.uuid === uuid;
       })) {
         resolve(true);
       } else {
@@ -50,7 +50,6 @@ router.post('/manufacture', function(req, res, next) {
   var token = req.headers.authorization.trim().split(' ');
 
   if (token[0] !== "Bearer" || token[1] !== MANUFACTURER_BEARER) {
-    console.log(token[1]);
     res.sendStatus(403);
     return;
   }
@@ -220,8 +219,8 @@ router.post('/img/fetch/:deviceId', async function(req, res, next) {
 
   // Return the latest image for the device and its timestamp
   database.fetchImageForDevice(deviceId, function (err, result) {
-    if (err) {
-      res.sendStatus(500).end();
+    if (err || !result) {
+      res.sendStatus(404).end();
       return;
     }
 
@@ -245,7 +244,12 @@ router.post('/img/request/:deviceId', async function(req, res, next) {
   }
 
   // If an image is requested, then queue the update script to respond requesting an image
-  database.setDeviceImageRequested(deviceId, true, () => {
+  database.setDeviceImageRequested(deviceId, true, (err) => {
+    if (err) {
+      res.sendStatus(404);
+      return;
+    }
+
     res.status(200).end('Image Requested.');
   });
 
@@ -274,34 +278,30 @@ router.post('/update', function(req, res, next) {
           sendConfigUpdate(result.config);
           return;
         }
-
-        var sendFrame = 0;
-        if (result.send_image) {
-          sendFrame = 1;
-        }
-
-        if (result.c_recieved || result.config.length == 0 ) {
-          // If it has been longer than our specified timeout, send the new settings
-          database.getDeviceStatusByUUID(req.body.uuid, function(err, device) {
-            if (!err && deviceIsActive(device, 30)) {
+        database.getDeviceStatusByUUID(req.body.uuid, function(err, deviceStatus) {
+          if (result.c_recieved || result.config.length == 0 ) {
+            // If it has been longer than our specified timeout, send the new settings
+            if (!err && deviceIsActive(deviceStatus, 30)) {
               // Device is active, don't send current settings
-              res.status(200).end('updateConfig=0|sendFrame=' + sendFrame);
+              res.status(200).end('updateConfig=0|sendFrame=' + result.send_image);
             } else {
               // Device just came online, update the config
-              sendConfigUpdate(result.config, sendFrame);
+              sendConfigUpdate(result.config, result.send_image);
             }
-          });
-        } else {
-          sendConfigUpdate(result.config, sendFrame);
-        }
-      });
+          } else {
+            sendConfigUpdate(result.config, result.send_image);
+          }
 
-      // Then update the device status in the database
-      database.updateDeviceStatus(req.body.uuid, req.body);
+          // Then update the device status in the database
+          database.updateDeviceStatus(req.body.uuid, req.body);
+          
+        });
+      });
 
       if (req.body.frame) {
         // Store the image in the images database if we recieved an image
         database.storeImageForDevice(req.body.uuid, req.body.frame, req.body.timestamp);
+
         database.setDeviceImageRequested(req.body.uuid, false);
       }
     }

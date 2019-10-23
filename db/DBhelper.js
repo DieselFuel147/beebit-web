@@ -80,7 +80,7 @@ Dbhelper.prototype.getDeviceByUUID = function(uuid, callback) {
 };
 
 Dbhelper.prototype.getDeviceConfigByUUID = function(uuid, callback) {
-    const sql = "SELECT config, c_recieved FROM DEVICES WHERE uuid = X'" + uuid + "';";
+    const sql = "SELECT config, c_recieved, send_image FROM DEVICES WHERE uuid = X'" + uuid + "';";
     db.serialize(() => { db.get(sql, callback) });
 };
 
