@@ -63,6 +63,8 @@ $(document).ready(function() {
     $("#boxW").on("change paste keyup", onValueChanged);
     $("#boxH").on("change paste keyup", onValueChanged);
 
+    $("#delBox").on("click", deleteCurrent);
+
     // Fetch the boxes from the server and draw them
     //drawBoxes();
 
@@ -77,6 +79,23 @@ $(document).ready(function() {
     // Continually send periodic requests for the new image until its timestamp is higher than the time we requested an image
     interval = setInterval(checkDeviceImage, config_options.check_frequency);
 });
+
+function deleteCurrent() {
+    if (selectedBoxIndex > -1) {
+        boxes.splice(selectedBoxIndex, 1);
+        selectedBoxIndex = -1;
+        clearAllFields();
+        redraw();
+    }
+}
+
+function clearAllFields() {
+    $("#boxName").val("");
+    $("#boxX").val("");
+    $("#boxY").val("");
+    $("#boxW").val("");
+    $("#boxH").val("");
+}
 
 function onSelectionChanged(box) {
     // When the selected box changes
