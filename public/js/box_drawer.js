@@ -1,68 +1,16 @@
-var config_options = {
-    check_frequency: 1000, // How often to check for the image response, in milliseconds
-    aspect_ratio: 0.75
-}
+var config_options = {};
 
 var hostname = location.protocol + "//" + location.host;
 var beeId = "";
+var config_post_url = "";
 
-var timeRequested = Math.floor((new Date()/1000));
-var interval;
-
-// Box drawing attributes
-let canvas_w = 600;
-let canvas_h = 450;
-let ctx;
+let canvas_w = 400;
+let canvas_h = 400;
+let drawArea;
 
 var selected_idx;
 
 boxes = [];
-
-function checkDeviceImage() {
-    $.post(`${hostname}/bee/img/fetch/${beeId}`, function (data) {
-        console.log(timeRequested);
-        console.log(data.rtime);
-        if (data.rtime > timeRequested) {
-            $("#loadIndicator").hide();
-            var canvasImg = new Image(canvas_w, canvas_h);
-            canvasImg.src = "data:image/jpg;base64," + data.image;
-
-            canvasImg.onload = function() {
-                // Draw the retrieved image to the canvas
-                ctx.drawImage(canvasImg, 0, 0, canvas_w, canvas_h);
-            }
-
-            clearInterval(interval);
-        }
-    });
-}
-
-$(document).ready(function() {
-    beeId = $("#beeID")[0].innerHTML;
-
-    let canvas = $("#boxDraw")[0];
-    ctx = canvas.getContext("2d");
-
-    canvas_w = $("#boxDraw").parent().width();
-    canvas_h = canvas_w * config_options.aspect_ratio;
-
-    canvas.width = canvas_w;
-    canvas.height = canvas_h;
-
-    // Fetch the boxes from the server and draw them
-    //drawBoxes();
-
-    // Send a request to the server for an image of the bee current state
-    $.post(`${hostname}/bee/img/request/${beeId}`, function(data) {
-        console.log(data);
-        timeRequested = Math.floor((new Date()) / 1000)
-    }).fail(function(err) {
-        //console.log(err);
-    });
-
-    // Continually send periodic requests for the new image until its timestamp is higher than the time we requested an image
-    interval = setInterval(checkDeviceImage, config_options.check_frequency);
-});
 
 function drawBox(b) {
     drawArea.append(b);
@@ -131,6 +79,18 @@ function drawBoxes() {
         drawBox(b);
     });
 }
+
+
+$(document).ready(function() {
+    beeId = $("#beeID")[0].innerHTML;
+    config_post_url = hostname + "/dashboard/bees/" + beeId + "/boxes";
+
+    drawArea = $("#graph")[0];
+    drawArea.setAttribute("width", canvas_w);
+    drawArea.setAttribute("height", canvas_h);
+    drawBoxes();
+});
+
 
 /* Moveable svg */
 // http://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
