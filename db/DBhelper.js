@@ -121,6 +121,21 @@ Dbhelper.prototype.addDevice = function(uuid, user, description = "", config, ca
     db.serialize(() => { db.run(sql, user, description, config, 0, callback) });
 };
 
+Dbhelper.prototype.setDeviceImageRequested = function(uuid, requested, callback) {
+    const sql = "UPDATE DEVICES SET send_image = ? WHERE uuid=X'" + uuid + "';";
+    db.serialize(() => { db.run(sql, requested, callback) });
+}
+
+Dbhelper.prototype.storeImageForDevice = function(uuid, imageBase64, recordedTime, callback) { 
+    const sql = "REPLACE INTO DEVICE_IMAGES(uuid, image, rtime) VALUES (X'" + uuid + "', ?, ?)";
+    db.serialize(() => { db.run(sql, imageBase64, recordedTime, callback) });
+}
+
+Dbhelper.prototype.fetchImageForDevice = function(uuid, callback) {
+    const sql = "SELECT * FROM DEVICE_IMAGES WHERE uuid = X'" + uuid + "';";
+    db.serialize(() => { db.get(sql, callback) });
+}
+
 /* Functions on the LOGS table (Records from a device) */
 Dbhelper.prototype.getAverageForDay = function(day, username, callback) {
     const sql = "SELECT date(rtime, 'unixepoch', 'localtime') as day, AVG(people) as average FROM LOGS WHERE day=? AND uuid IN (SELECT uuid FROM DEVICES WHERE username = ?) GROUP BY day;";

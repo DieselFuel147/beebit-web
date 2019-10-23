@@ -203,6 +203,54 @@ router.post('/stats/:deviceId', async function(req, res, next) {
 
 });
 
+router.post('/img/fetch/:deviceId', async function(req, res, next) {
+  var deviceId = req.params.deviceId;
+
+  if (!req.session.username) {
+    res.sendStatus(403).end();
+    return;
+  }
+
+  var hasDevice = await userHasDevice(req.session.username, deviceId);
+
+  if (!hasDevice) {
+    res.sendStatus(403).end();
+    return;
+  }
+
+  // Return the latest image for the device and its timestamp
+  database.fetchImageForDevice(deviceId, function (err, result) {
+    if (err) {
+      res.sendStatus(500).end();
+      return;
+    }
+
+    res.json(result).end();
+  });
+});
+
+router.post('/img/request/:deviceId', async function(req, res, next) {
+  var deviceId = req.params.deviceId;
+
+  if (!req.session.username) {
+    res.sendStatus(403).end();
+    return;
+  }
+
+  var hasDevice = await userHasDevice(req.session.username, deviceId);
+
+  if (!hasDevice) {
+    res.status(403).end('Not the owner of that device.');
+    return;
+  }
+
+  // If an image is requested, then queue the update script to respond requesting an image
+  database.setDeviceImageRequested(deviceId, true, () => {
+    res.status(200).end('Image Requested.');
+  });
+
+});
+
 /* POST update. */
 router.post('/update', function(req, res, next) {
   if (!req.body.uuid) {
@@ -210,9 +258,9 @@ router.post('/update', function(req, res, next) {
     return;
   }
 
-  function sendConfigUpdate(config) {
+  function sendConfigUpdate(config, sendFrame) {
     database.setDeviceConfigRecievedByUUID(req.body.uuid, () => {
-      res.status(200).end('updateConfig=1|' + config);
+      res.status(200).end('sendFrame=' + sendFrame + '|updateConfig=1|' + config);
     });
   }
 
@@ -222,24 +270,40 @@ router.post('/update', function(req, res, next) {
     } else {
       // First get the config for the device and check when the device was last online
       database.getDeviceConfigByUUID(req.body.uuid, function(err, result) {
-        if (err || result.c_recieved || result.config.length == 0 ) {
+        if (err) {
+          sendConfigUpdate(result.config);
+          return;
+        }
+
+        var sendFrame = 0;
+        if (result.send_image) {
+          sendFrame = 1;
+        }
+
+        if (result.c_recieved || result.config.length == 0 ) {
           // If it has been longer than our specified timeout, send the new settings
           database.getDeviceStatusByUUID(req.body.uuid, function(err, device) {
             if (!err && deviceIsActive(device, 30)) {
               // Device is active, don't send current settings
-              res.status(200).end('updateConfig=0');
+              res.status(200).end('updateConfig=0|sendFrame=' + sendFrame);
             } else {
               // Device just came online, update the config
-              sendConfigUpdate(result.config);
+              sendConfigUpdate(result.config, sendFrame);
             }
           });
         } else {
-          sendConfigUpdate(result.config);
+          sendConfigUpdate(result.config, sendFrame);
         }
       });
 
       // Then update the device status in the database
       database.updateDeviceStatus(req.body.uuid, req.body);
+
+      if (req.body.frame) {
+        // Store the image in the images database if we recieved an image
+        database.storeImageForDevice(req.body.uuid, req.body.frame, req.body.timestamp);
+        database.setDeviceImageRequested(req.body.uuid, false);
+      }
     }
   });
 

@@ -447,7 +447,7 @@ router.get('/register-a-bee', function(req, res, next) {
   });
 });
 
-const default_config = 'frequency=20|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=5|raspi=0|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50'
+const default_config = 'frequency=20|image_quality=25|model=dnn/yolov3.weights|config=dnn/config.cfg|confidence=0.2|skipFrames=20|imageWidth=320|imageHeight=240|useOpenCL=1|useCSRT=0|neuralNetQuality=416|maxDisappeared=50|searchDistance=50|useTracking=1'
 
 /* POST device register page. */
 router.post('/register-a-bee', function(req, res, next) {
