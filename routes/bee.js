@@ -170,6 +170,58 @@ router.get('/stats/:endDate/:days', async function(req, res, next) {
 
 });
 
+// Gets the set of boxes belonging to a particular bee
+router.post('/boxes/get/:deviceId', async function(req, res, next) {
+  var deviceId = req.params.deviceId;
+
+  if (!req.session.username) {
+    res.sendStatus(403);
+    return;
+  }
+
+  var hasDevice = await userHasDevice(req.session.username, deviceId);
+
+  if (!hasDevice) {
+    res.sendStatus(403);
+    return;
+  }
+
+  database.getBoxesByUUID(deviceId, function(err, boxes) {
+    if (err) {
+      res.sendStatus(404);
+      return;
+    }
+
+    res.json(boxes).end();
+  });
+});
+
+// Sets the boxes for a particular device
+router.post('/boxes/set/:deviceId', async function(req, res, next) {
+  var deviceId = req.params.deviceId;
+
+  if (!req.body) {
+    res.sendStatus(400);
+    return;
+  }
+
+  var boxes = req.body;
+
+  if (!req.session.username) {
+    res.sendStatus(403);
+    return;
+  }
+
+  var hasDevice = await userHasDevice(req.session.username, deviceId);
+
+  if (!hasDevice) {
+    res.sendStatus(403);
+    return;
+  }
+
+  database.setBoxesByUUID(deviceId, boxes);
+});
+
 // Returns statistics for a single device
 router.post('/stats/:deviceId', async function(req, res, next) {
   var deviceId = req.params.deviceId;

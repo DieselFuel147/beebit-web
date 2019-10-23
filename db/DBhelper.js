@@ -184,8 +184,30 @@ Dbhelper.prototype.checkKeyAvailable = function(uuid, callback) {
 
 Dbhelper.prototype.getLogsByUUID = function(uuid, callback) {
     const sql = "select  datetime(rtime, 'unixepoch', 'localtime') as rtime, people, dstatus from LOGS where hex(uuid) = '" + uuid + "';";
-    console.log(sql);
     db.serialize(() => {db.all(sql, callback)});
+}
+
+// Methods to control the boxes related to a particular device
+Dbhelper.prototype.getBoxesByUUID = function(uuid, callback) {
+    const sql = "SELECT name, x_start AS x, y_start AS y, width, height FROM BOXES WHERE uuid = X'" + uuid + "';";
+    db.serialize(() => {db.all(sql, callback)});
+}
+
+// NOTE: Callback is called for each inserted box
+Dbhelper.prototype.setBoxesByUUID = function(uuid, boxes, callback) {
+    // Remove all boxes in the database and replace them with the client's boxes
+    const delete_sql = "DELETE FROM BOXES WHERE uuid = X'" + uuid + "';";
+    const insert_sql = "INSERT INTO BOXES (uuid, name, x_start, y_start, width, height) VALUES (X'" + uuid + "', ?, ?, ?, ?, ?);";
+
+    console.log(boxes);
+
+    db.serialize(function() {
+        db.run(delete_sql, callback);
+
+        boxes.forEach(function (box) {
+            db.run(insert_sql, box.name, box.x, box.y, box.width, box.height, callback);
+        });
+    });
 }
 
 module.exports = Dbhelper;

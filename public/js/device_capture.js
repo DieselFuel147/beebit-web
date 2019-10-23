@@ -43,6 +43,7 @@ function checkDeviceImage() {
 }
 
 $(document).ready(function() {
+    $("#updateNotify").hide();
     beeId = $("#beeID")[0].innerHTML;
 
     canvas = $("#boxDraw")[0];
@@ -64,9 +65,10 @@ $(document).ready(function() {
     $("#boxH").on("change paste keyup", onValueChanged);
 
     $("#delBox").on("click", deleteCurrent);
+    $("#applyBoxes").on("click", saveBoxes);
 
     // Fetch the boxes from the server and draw them
-    //drawBoxes();
+    fetchBoxes();
 
     // Send a request to the server for an image of the bee current state
     $.post(`${hostname}/bee/img/request/${beeId}`, function(data) {
@@ -79,6 +81,29 @@ $(document).ready(function() {
     // Continually send periodic requests for the new image until its timestamp is higher than the time we requested an image
     interval = setInterval(checkDeviceImage, config_options.check_frequency);
 });
+
+function fetchBoxes() {
+    $.post(`${hostname}/bee/boxes/get/${beeId}`, function(data) {
+        boxes = data;
+        redraw();
+    });
+}
+
+function saveBoxes() {
+    $.ajax({
+        url: `${hostname}/bee/boxes/set/${beeId}`,
+        type: 'POST',
+        data: JSON.stringify(boxes),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        async: true,
+        success: function(msg) {
+            // Success handler. Send confirmation onto the page.
+            $("#updateNotify").show();
+            setTimeout(() => { $("#updateNotify").fadeOut() }, 2000);
+        }
+    });
+}
 
 function deleteCurrent() {
     if (selectedBoxIndex > -1) {
