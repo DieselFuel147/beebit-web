@@ -193,6 +193,17 @@ Dbhelper.prototype.getBoxesByUUID = function(uuid, callback) {
     db.serialize(() => {db.all(sql, callback)});
 }
 
+Dbhelper.prototype.getBoxCounts = function(uuid, recordedTime, callback) {
+    const sql = `SELECT BOXES.name, COUNT(*) as count FROM DETECTIONS LEFT JOIN BOXES
+                    ON DETECTIONS.uuid = BOXES.uuid
+                    WHERE BOXES.uuid = X'${uuid}' AND rtime = ${recordedTime}
+                    AND DETECTIONS.x_pos > BOXES.x_start AND DETECTIONS.x_pos < (BOXES.x_start + BOXES.width)
+                    AND DETECTIONS.y_pos > BOXES.y_start AND DETECTIONS.y_pos < (BOXES.y_start + BOXES.height)
+                    GROUP BY BOXES.name;`;
+    
+    db.serialize(() => {db.all(sql, callback)});
+}
+
 // NOTE: Callback is called for each inserted box
 Dbhelper.prototype.setBoxesByUUID = function(uuid, boxes, callback) {
     // Remove all boxes in the database and replace them with the client's boxes

@@ -170,6 +170,39 @@ router.get('/stats/:endDate/:days', async function(req, res, next) {
 
 });
 
+// Gets the boxes and their counts for a particular device
+router.get('/boxes/counts/:deviceId/:rtime', async function(req, res, next) {
+  var deviceId = req.params.deviceId;
+  var rtime = parseInt(req.params.rtime);
+
+  if (!req.session.username) {
+    res.sendStatus(403);
+    return;
+  }
+
+  if (isNaN(rtime)) {
+    res.sendStatus(400);
+    return;
+  }
+
+  var hasDevice = await userHasDevice(req.session.username, deviceId);
+
+  if (!hasDevice) {
+    res.sendStatus(403);
+    return;
+  }
+
+  database.getBoxCounts(deviceId, rtime, function(err, boxes) {
+    if (err) {
+      res.sendStatus(404);
+      return;
+    }
+
+    res.json(boxes).end();
+
+  });
+});
+
 // Gets the set of boxes belonging to a particular bee
 router.post('/boxes/get/:deviceId', async function(req, res, next) {
   var deviceId = req.params.deviceId;

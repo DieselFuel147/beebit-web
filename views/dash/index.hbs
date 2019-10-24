@@ -93,6 +93,7 @@
                   <th>Status</th>
                   <th>Information</th>
                 </thead>
+                <tbody>
                 {{#if devices}}
                   {{#each devices}}
                   <tr id="mainTable{{@key}}">
@@ -103,8 +104,16 @@
                     <td><span class="label label-success" id="label{{@key}}"></span></td>
                     <td id="status{{@key}}"></td>
                   </tr>
+                  <tr id="boxesRow{{@key}}">
+                    <td>&nbsp;</td>
+                    <td colspan="2">
+                      <table class="table" id="boxesTable{{@key}}">
+                      </table>
+                    </td>
+                  </tr>
                   {{/each}}
                 {{/if}}
+                </tbody>
               </table>
             </div>
           </div>

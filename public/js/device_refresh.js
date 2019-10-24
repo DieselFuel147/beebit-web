@@ -63,6 +63,27 @@ function displayDevice(deviceIndex, device) {
         
     var people = document.getElementById("device" + deviceIndex);
     people.innerHTML = device.people;
+
+    // Get the boxes for this device and their count
+    $.get(`${hostname}/bee/boxes/counts/${device.uuid}/${device.time}`, function(boxes) {
+
+        if (boxes.length == 0) {
+            $("#boxesRow" + deviceIndex).hide();
+            return;
+        }
+
+        $("#boxesRow" + deviceIndex).show();
+
+        let finalHtml = "";
+        boxes.forEach(function(box) {
+            finalHtml += `<td width="50%"><i>${box.name}</i></td>`;
+            finalHtml += `<td style='text-align: left'>${box.count}</td>`;
+            finalHtml += "</tr>"
+        });
+
+        $("#boxesTable" + deviceIndex).html(finalHtml);
+    });
+
 }
 
 function sortDevices(da, db) {
