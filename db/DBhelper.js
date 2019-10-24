@@ -209,9 +209,7 @@ Dbhelper.prototype.setBoxesByUUID = function(uuid, boxes, callback) {
     // Remove all boxes in the database and replace them with the client's boxes
     const delete_sql = "DELETE FROM BOXES WHERE uuid = X'" + uuid + "';";
     const insert_sql = "INSERT INTO BOXES (uuid, name, x_start, y_start, width, height) VALUES (X'" + uuid + "', ?, ?, ?, ?, ?);";
-
-    console.log(boxes);
-
+    
     db.serialize(function() {
         db.run(delete_sql, callback);
 

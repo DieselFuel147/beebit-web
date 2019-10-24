@@ -39,7 +39,7 @@ function draw_form(config) {
     var boolean_types = ["raspi", "useOpenCL", "useCSRT", "useTracking"]
     var integer_types = ["frequency", "confidence", "skipFrames",
                         "imageWidth", "imageHeight", "neuralNetQuality",
-                        "maxDisappeared", "searchDistance"]
+                        "maxDisappeared", "searchDistance", "nmsThreshold", "image_quality"]
 
     config_options.forEach( function(v, k) {
         outHtml += "<tr>"
