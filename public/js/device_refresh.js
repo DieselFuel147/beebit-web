@@ -76,6 +76,7 @@ function displayDevice(deviceIndex, device) {
 
         let finalHtml = "";
         boxes.forEach(function(box) {
+            finalHtml += "<tr>"
             finalHtml += `<td width="50%"><i>${box.name}</i></td>`;
             finalHtml += `<td style='text-align: left'>${box.count}</td>`;
             finalHtml += "</tr>"
