@@ -194,10 +194,12 @@ Dbhelper.prototype.getDeviceNetworksByUUID = function(uuid, callback) {
 
 Dbhelper.prototype.insertNetworksByUUID = function(uuid, networksData, callback) {
 
+    const delete_sql = `DELETE FROM DEVICE_NETWORKS WHERE uuid=X'${uuid}' AND active = 0`
     const sql = `INSERT OR IGNORE INTO DEVICE_NETWORKS(uuid, ssid, net_type) VALUES (X'${uuid}', ?, ?);`;
 
     db.serialize(
         function() {
+            db.run(delete_sql);
             networksData.forEach(function(network) {
                 db.run(sql, network.ssid, network.type, callback);
             });
