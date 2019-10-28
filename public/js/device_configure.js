@@ -5,6 +5,9 @@ var beeId = "";
 var config_get_url = "";
 var config_post_url = "";
 
+var networks_get_url = "";
+var networks_post_url = "";
+
 function submit_form() {
     $('input').each(function(i) {  
         if (this.type == "checkbox") config_options.set(this.name, this.checked ? 1 : 0)
@@ -59,14 +62,54 @@ function draw_form(config) {
     $("#configForm").html(outHtml);
 }
 
+function populate_ssids(networks) {
+    if (networks.length == 0) {
+        $("#networkDiv").hide();
+        $("#configDiv").attr("class", "col-md-12");
+        return;
+    }
+
+    outHtml = "";
+    networks.forEach(function(network) {
+        outHtml += `<option ${network.active ? "selected" : ""}>${network.ssid}</option>`;
+    });
+
+    $("#networkSelect").html(outHtml);
+}
+
+function submit_network() {
+
+    console.log("Network Config submitted.");
+
+    $.post(networks_post_url, { 
+        ssid: $("#networkSelect option:selected").html(), 
+        password: $("#passcodeInput").val()
+    }, function() {
+        // Submit network connection choice
+        $("#netUpdateMsg").show();
+        setTimeout(() => {$("#netUpdateMsg").fadeOut(1000)}, 2000);
+    }).fail(function(err) {
+        console.log(err);
+    });
+}
+
 $(document).ready(function() {
     beeId = $("#beeID")[0].innerHTML;
     config_get_url = hostname + "/bee/" + beeId + "/config/json";
     config_post_url = hostname + "/dashboard/bees/" + beeId + "/configure";
 
+    networks_get_url = hostname + "/bee/" + beeId + "/network";
+    networks_post_url = hostname + "/bee/" + beeId + "/network/connect";
+
     $.getJSON(config_get_url, draw_form).fail(function(err) {
         console.log(err);
     });
 
+    $("#netUpdateMsg").hide();
+    $.post(networks_get_url, populate_ssids).fail(function(err) {
+        console.log(err);
+    });
+
     $("#submitconfig")[0].onclick = submit_form;
+    $("#submitNetwork").on("click", submit_network);
 });

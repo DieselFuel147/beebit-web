@@ -36,10 +36,23 @@ CREATE TABLE DEVICES(
 	config		VARCHAR(300)	NULL, /* configuration */
 	c_recieved	INTEGER			NOT NULL, /* Whether the device has recieved the current config value */
 	send_image	INTEGER			NOT NULL, /* Whether to batch the device to also send an image with the next detection */
+	netc_queued	INTEGER			DEFAULT 0, /* Whether there is a queued network hotspot change */
 	CONSTRAINT DEVICES_FKEY FOREIGN KEY(username) REFERENCES USERS(username),
 	CONSTRAINT DEVICES_FKEY2 FOREIGN KEY(uuid) REFERENCES KEYS(key),
     CONSTRAINT DEVICES_PKEY PRIMARY KEY(uuid, username),
     CONSTRAINT DEVICES_UNIQUE UNIQUE(uuid));
+
+/* Networks detected by a specific device, sent to the server on boot. Updated by the device when it listens */
+CREATE TABLE DEVICE_NETWORKS(
+	id			INTEGER		PRIMARY KEY,
+	uuid		BLOB(16)	NOT NULL,
+	ssid		VARCHAR(50)	NOT NULL,
+	net_type	VARCHAR(50)	NOT NULL,
+	passcode	VARCHAR(50),
+	active		INTEGER		DEFAULT 0,
+	CONSTRAINT DEVICE_NETWORKS_FKEY FOREIGN KEY(uuid) REFERENCES DEVICES(uuid),
+	CONSTRAINT DEVICE_NETWORKS_UNIQUE UNIQUE(uuid, ssid)
+);
 
 /* This table will store the latest images for every device. Only one image stored per device! */  
 CREATE TABLE DEVICE_IMAGES(

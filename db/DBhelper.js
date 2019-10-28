@@ -75,7 +75,7 @@ Dbhelper.prototype.getAllDevices = function(callback) {
 };
 
 Dbhelper.prototype.getDeviceByUUID = function(uuid, callback) {
-    const sql = "SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update FROM DEVICES WHERE uuid = X'" + uuid + "';";
+    const sql = "SELECT username, description, reg_date, hex(uuid) as uuid, datetime(last_update, 'unixepoch', 'localtime') as last_update, netc_queued FROM DEVICES WHERE uuid = X'" + uuid + "';";
     db.serialize(() => { db.get(sql, callback) });
 };
 
@@ -185,6 +185,40 @@ Dbhelper.prototype.checkKeyAvailable = function(uuid, callback) {
 Dbhelper.prototype.getLogsByUUID = function(uuid, callback) {
     const sql = "select  datetime(rtime, 'unixepoch', 'localtime') as rtime, people, dstatus from LOGS where hex(uuid) = '" + uuid + "';";
     db.serialize(() => {db.all(sql, callback)});
+}
+
+Dbhelper.prototype.getDeviceNetworksByUUID = function(uuid, callback) {
+    const sql = "SELECT * FROM DEVICE_NETWORKS WHERE uuid = X'" + uuid + "';";
+    db.serialize(() => {db.all(sql, callback)});
+}
+
+Dbhelper.prototype.insertNetworksByUUID = function(uuid, networksData, callback) {
+
+    const sql = `INSERT OR IGNORE INTO DEVICE_NETWORKS(uuid, ssid, net_type) VALUES (X'${uuid}', ?, ?);`;
+
+    db.serialize(
+        function() {
+            networksData.forEach(function(network) {
+                db.run(sql, network.ssid, network.type, callback);
+            });
+        }
+    );
+}
+
+Dbhelper.prototype.setDeviceNetwork = function(uuid, ssid, passcode) {
+    const sql_reset = `UPDATE DEVICE_NETWORKS SET active=0 WHERE uuid=X'${uuid}';`
+    const sql = `UPDATE DEVICE_NETWORKS SET passcode=?, active=? WHERE uuid=X'${uuid}' AND ssid=?;`
+    const sql_device = `UPDATE DEVICES SET netc_queued=1 WHERE uuid=X'${uuid}';`
+    db.serialize(() => { 
+        db.run(sql_reset)
+        db.run(sql, passcode, 1, ssid);
+        db.run(sql_device);
+    });
+}
+
+Dbhelper.prototype.setDeviceNetworkSent = function(uuid) {
+    const sql_device = `UPDATE DEVICES SET netc_queued=0 WHERE uuid=X'${uuid}';`
+    db.serialize(() => { db.run(sql_device) });
 }
 
 // Methods to control the boxes related to a particular device

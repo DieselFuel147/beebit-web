@@ -395,6 +395,94 @@ router.post('/update', function(req, res, next) {
 
 });
 
+router.post('/:deviceId/network', async function(req, res, next) {
+
+  if (!req.session.username) {
+    res.sendStatus(403).end();
+    return;
+  }
+
+  var deviceId = req.params.deviceId;
+
+  var hasDevice = await userHasDevice(req.session.username, deviceId);
+
+  if (!hasDevice) {
+    res.status(403).end('Not the owner of that device.');
+    return;
+  }
+
+  database.getDeviceNetworksByUUID(req.params.deviceId, function(err, networks) {
+    if (err) {
+      res.statusCode(500).end();
+      return;
+    }
+
+    // Render the network configuration page
+    res.json(networks);
+  });
+});
+
+router.post('/:deviceId/network/connect', async function(req, res, next) {
+  if (!req.session.username) {
+    res.sendStatus(403).end();
+    return;
+  }
+
+  var deviceId = req.params.deviceId;
+
+  var hasDevice = await userHasDevice(req.session.username, deviceId);
+
+  if (!hasDevice) {
+    res.status(403).end('Not the owner of that device.');
+    return;
+  }
+
+  var ssid = req.body.ssid;
+  var password = req.body.password;
+
+  database.setDeviceNetwork(deviceId, ssid, password);
+  res.sendStatus(200).end();
+});
+
+// Bee posts their network options once at boot. The server stores these and connection information is returned from the server
+router.post('/network', function(req, res, next) {
+  if (!req.body.uuid) {
+    res.sendStatus(403);
+    return;
+  }
+
+  database.getDeviceByUUID(req.body.uuid, function(err, device) {
+    if (err | !device) {
+      console.log(error);
+      res.sendStatus(404).end();
+      return;
+    }
+
+    database.getDeviceNetworksByUUID(req.body.uuid, function(err, networks) {
+
+      if (err | networks.length == 0) {
+        return;
+      }
+
+      let foundNetwork = networks.find((network) => { return network.active && device.netc_queued });
+
+      if (foundNetwork == undefined) {
+        res.json({ active: 0 }).end();
+      } else {
+        res.json(foundNetwork).end();
+
+        // Update the database to set the network information as sent
+        database.setDeviceNetworkSent(req.body.uuid);
+      }
+
+    });
+
+    database.insertNetworksByUUID(req.body.uuid, JSON.parse(req.body.networks));
+
+  });
+
+});
+
 router.get('/:deviceId/config/:json?', async function(req, res, next) {
   if (!req.session.username) {
     res.status(403).end('Not logged in');
