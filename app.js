@@ -54,7 +54,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(session({secret: 'password123',	cookie: { maxAge: 900000 } }));
+app.use(session({secret: 'password123',	cookie: { maxAge: 9000000 } }));
 
 /* Set up access routes */
 app.use('/', index);
