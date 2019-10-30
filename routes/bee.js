@@ -120,10 +120,16 @@ router.get('/status/total', function(req, res, next) {
       if (!deviceIsActive(device, req.session.disconnectTime)) return total;
 
       return total + device.people;
-    });
+    }, 0);
+
+    // Sort devices in descending time order
+    devices.sort(function(a, b) {
+      return b.time - a.time;
+    })
 
     res.json({
-      count: totalPeopleCount
+      count: totalPeopleCount,
+      lastUpdate: devices[0].time
     }).end();
   });
 });
