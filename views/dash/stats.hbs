@@ -26,7 +26,7 @@
               <h3 class="box-title">Live People Count</h3>
 
               <div class="box-tools pull-right">
-                Real time
+                Real-time
               </div>
             </div>
             <div class="box-body">
@@ -97,13 +97,18 @@
     // We use an inline data source in the example, usually data would
     // be fetched from a server
     
-    var data = [], totalPoints = 15
+    var data = [], timePeriod = 30
 
     var hostname = location.protocol + "//" + location.host;
 
+    var firstUpdate = -1;
     var lastUpdate = 0;
 
     function updateTotal(total) {
+
+      if (firstUpdate == -1) {
+        firstUpdate = total.lastUpdate;
+      }
 
       // Don't add any data if there's no new updates
       if (total.lastUpdate <= lastUpdate) {
@@ -112,15 +117,18 @@
 
       console.log("New Count: " + total.count);
 
-      data.push(total.count);
+      data.push([total.lastUpdate, total.count]);
 
-      if (data.length > totalPoints+1) {
+      // If there's more than n seconds on the graph, remove the first element.
+      if (total.lastUpdate > (firstUpdate + timePeriod)) {
         data.shift();
+        firstUpdate = data[0][0];
       }
 
       var newArr = [];
+
       for (var i = 0; i < data.length; i++) {
-        newArr.push([i, data[i]]);
+        newArr.push([-(timePeriod - (data[i][0] - firstUpdate)), data[i][1]]);
       }
       console.log(newArr);
       interactive_plot.setData([newArr]);
@@ -147,7 +155,7 @@
         tickColor  : '#f3f3f3'
       },
       series: {
-        shadowSize: 0, // Drawing is faster without shadows
+        shadowSize: 6, // Drawing is faster without shadows
         color     : '#3c8dbc'
       },
       lines : {
@@ -157,11 +165,15 @@
       yaxis : {
         min : 0,
         max: 100,
-        show: true
+        show: true,
+        
       },
       xaxis : {
-        max: totalPoints,
-        show: true
+        max: 0,
+        min: -timePeriod,
+        transform: function (v) { return -v; },
+        inverseTransform: function (v) { return -v; },
+        show: false
       }
     });
 
