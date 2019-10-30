@@ -11,6 +11,8 @@ module.exports = function(db) {
 const MANUFACTURER_BEARER = "2%qH3n$d2z^SS-aV";
 
 function deviceIsActive(device, disconnectTime) {
+  if (device.time === undefined) return false;
+  
   return device.time > (Date.now()/1000 - disconnectTime);
 }
 
