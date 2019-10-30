@@ -469,13 +469,14 @@ router.post('/register-a-bee', function(req, res, next) {
 
   database.getDeviceByUUID(uuid, (err, device) => {
     if (err || !device) {
-      console.log(err);
       database.checkKeyAvailable(uuid, (err, rows) => {
         if (err || rows.length == 0) {
+          console.log("invalid key");
           res.status(400).end('Invalid key');
         } else {
           config = ('uuid=' + uuid  + '|' + default_config);
           database.addDevice(uuid, req.session.username, description, config, (err) => {
+            console.log(err);
             if (err) res.status(500).end('error adding device')
             else res.status(200).end('Device Linked')
           })

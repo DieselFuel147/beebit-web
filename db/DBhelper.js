@@ -117,7 +117,7 @@ Dbhelper.prototype.getDeviceStatisticsByUuid = function(uuid, enddate, days, cal
 };
 
 Dbhelper.prototype.addDevice = function(uuid, user, description = "", config, callback) {
-    const sql = "INSERT INTO DEVICES(username, uuid, description, reg_date, last_update, config, c_recieved) VALUES(? , X'" + uuid + "', ?, date('now'), strftime('%s', 'now'), ?, ?);"
+    const sql = "INSERT INTO DEVICES(username, uuid, description, reg_date, last_update, config, c_recieved, send_image) VALUES(? , X'" + uuid + "', ?, date('now'), strftime('%s', 'now'), ?, ?, 0);"
     db.serialize(() => { db.run(sql, user, description, config, 0, callback) });
 };
 
